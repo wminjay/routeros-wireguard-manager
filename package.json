@@ -1,0 +1,43 @@
+{
+  "name": "routeros-wg-config-workspace",
+  "version": "0.1.0",
+  "description": "RouterOS WireGuard配置管理工具 - Monorepo",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wminjay/routeros-wireguard-manager.git"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start:server": "cd packages/server && npm start",
+    "dev:server": "cd packages/server && npm run dev",
+    "start:client": "cd packages/client && npm start",
+    "dev:all": "concurrently \"npm run dev:server\" \"npm run start:client\"",
+    "install:all": "npm install",
+    "build": "cd packages/client && npm run build",
+    "clean": "rm -rf node_modules packages/*/node_modules packages/client/build",
+    "lint": "cd packages/client && npm run lint && cd ../server && npm run lint",
+    "test:client": "cd packages/client && npm test",
+    "test:server": "cd packages/server && npm test",
+    "test:all": "npm run test:client && npm run test:server"
+  },
+  "keywords": [
+    "routeros",
+    "wireguard",
+    "vpn",
+    "config"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "esm": "^3.2.25",
+    "i18next": "^24.2.3",
+    "i18next-browser-languagedetector": "^8.0.4",
+    "react-i18next": "^15.4.1"
+  }
+}

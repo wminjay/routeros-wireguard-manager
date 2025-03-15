@@ -1,0 +1,24 @@
+{
+  "name": "common",
+  "version": "0.1.0",
+  "description": "RouterOS WireGuard配置管理工具共享代码",
+  "main": "index.js",
+  "scripts": {
+    "build": "echo \"No build step\" && exit 0",
+    "lint": "eslint .",
+    "test": "echo \"No tests defined\" && exit 0"
+  },
+  "keywords": [
+    "routeros",
+    "wireguard",
+    "vpn",
+    "config"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1"
+  }
+} 

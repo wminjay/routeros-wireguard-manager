@@ -1,0 +1,723 @@
+{
+  "app": {
+    "title": "WireGuard配置器",
+    "fullTitle": "RouterOS WireGuard配置管理器"
+  },
+  "menu": {
+    "home": "首页",
+    "interfaces": "WireGuard接口",
+    "peers": "对等点",
+    "quickSetup": "快速创建",
+    "settings": "设置",
+    "language": "语言"
+  },
+  "language": {
+    "switchLabel": "切换语言",
+    "current": "当前语言",
+    "switchLabelBilingual": "切换语言 / Change Language"
+  },
+  "status": {
+    "connected": "已连接",
+    "disconnected": "未连接"
+  },
+  "errors": {
+    "routerStatus": "获取RouterOS状态出错",
+    "connectionError": "连接错误",
+    "fetchInterfacesFailed": "获取接口列表失败",
+    "fetchInterfaces": "获取接口列表错误:",
+    "fetchInterfacesCheckConnection": "获取接口列表失败，请检查网络连接或服务器状态",
+    "suggestedIPError": "获取建议IP错误:",
+    "generateKeysFailed": "生成密钥对失败",
+    "generateKeysError": "生成密钥对时出错:",
+    "generateKeysErrorMessage": "生成密钥对时出错: ",
+    "createPeerFailed": "创建对等点失败",
+    "createPeerError": "创建对等点错误:",
+    "createPeerTryAgain": "创建对等点失败，请稍后重试"
+  },
+  "common": {
+    "back": "返回",
+    "cancel": "取消",
+    "create": "创建",
+    "edit": "编辑",
+    "delete": "删除",
+    "save": "保存",
+    "confirm": "确认",
+    "yes": "是",
+    "no": "否",
+    "copied": "已复制"
+  },
+  "interfaces": {
+    "title": "WireGuard 接口",
+    "createInterface": "创建接口",
+    "syncFromRouterOS": "从RouterOS同步",
+    "syncing": "同步中...",
+    "noInterfaces": "暂无接口",
+    "noInterfacesDescription": "您还没有创建任何 WireGuard 接口，点击下方按钮创建第一个接口。",
+    "enabled": "已启用",
+    "disabled": "已禁用",
+    "table": {
+      "name": "名称",
+      "listenPort": "监听端口",
+      "peerCount": "对等点数量",
+      "mtu": "MTU",
+      "status": "状态",
+      "actions": "操作"
+    },
+    "actions": {
+      "viewDetails": "查看详情",
+      "viewPeers": "查看对等点",
+      "edit": "编辑",
+      "delete": "删除"
+    },
+    "deleteModal": {
+      "title": "确认删除接口",
+      "confirmText": "您确定要删除接口 \"{name}\" 吗？此操作将同时删除该接口下的所有对等点，且无法恢复。",
+      "deleting": "删除中...",
+      "confirmDelete": "确认删除"
+    },
+    "errors": {
+      "fetchFailed": "获取接口列表失败",
+      "fetchError": "获取接口列表错误:",
+      "fetchErrorMessage": "获取接口列表失败，请检查网络连接或服务器状态",
+      "deleteFailed": "删除接口失败",
+      "deleteError": "删除接口错误:",
+      "deleteTryAgain": "删除接口失败，请稍后重试",
+      "syncFailed": "同步接口失败",
+      "syncError": "同步接口错误:",
+      "syncTryAgain": "同步接口失败，请稍后重试"
+    },
+    "syncSuccess": "同步成功！发现{{imported}}个新接口，共{{total}}个接口。"
+  },
+  "interfaceDetail": {
+    "backToInterfaces": "返回接口列表",
+    "updateSuccess": "接口更新成功",
+    "copySuccess": "已复制到剪贴板",
+    "copyError": "复制失败:",
+    "tabsAriaLabel": "接口详情标签页",
+    "tabs": {
+      "info": "接口信息",
+      "peers": "对等点"
+    },
+    "form": {
+      "name": "接口名称",
+      "listenPort": "监听端口",
+      "mtu": "MTU",
+      "enabled": "启用",
+      "comment": "备注"
+    },
+    "info": {
+      "title": "接口信息",
+      "interfaceName": "接口名称",
+      "displayName": "显示名称",
+      "listenPort": "监听端口",
+      "mtu": "MTU",
+      "status": "状态",
+      "comment": "备注"
+    },
+    "keys": {
+      "title": "密钥信息",
+      "publicKey": "公钥",
+      "privateKey": "私钥",
+      "copyPublicKey": "复制公钥",
+      "copyPrivateKey": "复制私钥",
+      "showPrivateKey": "显示私钥",
+      "hidePrivateKey": "隐藏私钥",
+      "privateKeyWarning": "注意：私钥是机密信息，请勿分享给他人。"
+    },
+    "peers": {
+      "title": "对等点列表",
+      "refreshStatus": "刷新对等点状态",
+      "refreshSuccess": "刷新成功",
+      "addPeer": "添加对等点",
+      "addFirstPeer": "添加第一个对等点",
+      "noPeers": "当前没有配置对等点",
+      "online": "在线",
+      "lastHandshake": "上次握手时间: {{time}}",
+      "neverConnected": "从未连接",
+      "noComment": "无备注",
+      "viewConfig": "查看客户端配置",
+      "timeAgo": {
+        "seconds": "{{count}}秒前",
+        "minutes": "{{count}}分钟前",
+        "hours": "{{count}}小时前",
+        "days": "{{count}}天前"
+      }
+    },
+    "errors": {
+      "fetchFailed": "获取接口详情失败",
+      "fetchError": "获取接口详情错误:",
+      "fetchErrorMessage": "获取接口详情失败，请检查网络连接或服务器状态",
+      "updateFailed": "更新接口失败",
+      "updateError": "更新接口错误:",
+      "updateTryAgain": "更新接口失败，请稍后重试",
+      "refreshPeersFailed": "刷新对等点状态失败",
+      "refreshPeersError": "刷新对等点状态错误:",
+      "refreshPeersErrorMessage": "刷新对等点状态失败："
+    }
+  },
+  "peerCreate": {
+    "title": "创建新对等点",
+    "description": "配置一个新的客户端对等点，创建后可以为客户端导出配置文件或二维码。",
+    "backButton": "返回",
+    "noInterfaces": "没有可用的接口，请先创建一个接口",
+    "createInterface": "创建接口",
+    "validation": {
+      "nameRequired": "对等点名称不能为空",
+      "interfaceRequired": "必须选择一个接口",
+      "allowedIPsRequired": "允许的IP不能为空",
+      "allowedIPsFormat": "允许的IP格式不正确，正确格式如：10.0.0.2/32",
+      "keepaliveRange": "保活间隔必须是0-1000之间的数值，0表示禁用",
+      "publicKeyRequired": "公钥不能为空",
+      "publicKeyFormat": "公钥格式不正确"
+    },
+    "form": {
+      "basicSettings": "基本设置",
+      "peerName": "对等点名称",
+      "peerNameHelp": "给对等点一个易记的名称，例如：手机-小明",
+      "selectInterface": "选择接口",
+      "selectInterfacePlaceholder": "请选择WireGuard接口",
+      "keySettings": "密钥配置方式",
+      "keySettingsHelp": "选择如何配置对等点的密钥",
+      "keyModeAuto": "服务器生成密钥",
+      "keyModeManual": "使用已有公钥",
+      "autoKeyInfo": "服务器将自动生成公钥和私钥。私钥用于客户端配置，请妥善保管。",
+      "manualKeyInfo": "使用客户端生成的公钥。私钥应保留在客户端设备上，切勿分享。",
+      "generatedPublicKey": "生成的公钥",
+      "copyPublicKey": "复制公钥",
+      "copied": "已复制",
+      "regenerateKeyPair": "重新生成密钥对",
+      "regenerating": "生成中...",
+      "publicKeyLabel": "公钥",
+      "publicKeyHelp": "输入客户端生成的公钥，格式应为Base64编码",
+      "allowedIPs": "允许的IP",
+      "allowedIPsHelp": "客户端的IP地址，例如：10.0.0.2/32",
+      "suggestedIP": "已自动填入推荐的IP地址",
+      "suggestedIPTooltip": "此IP是系统自动推荐的可用地址",
+      "persistentKeepalive": "保活间隔（秒）",
+      "persistentKeepaliveHelp": "保持连接活跃的间隔，设为0禁用此功能",
+      "enablePeer": "启用对等点",
+      "enablePeerTooltip": "启用后对等点将立即生效",
+      "comment": "备注",
+      "commentHelp": "可选，为此对等点添加备注说明",
+      "note": "对等点创建后将自动生成密钥对。创建对等点时会在RouterOS上添加对应配置。",
+      "cancel": "取消",
+      "createPeer": "创建对等点",
+      "creating": "创建中..."
+    }
+  },
+  "peerDetails": {
+    "title": "对等点详情",
+    "backButton": "返回",
+    "refreshTooltip": "刷新",
+    "deleteTooltip": "删除",
+    "breadcrumbs": {
+      "home": "首页",
+      "interfacesList": "接口列表",
+      "interfacePeers": "接口对等点",
+      "peersList": "对等点列表"
+    },
+    "tabs": {
+      "basicInfo": "基本信息",
+      "editSettings": "编辑设置",
+      "clientConfig": "客户端配置"
+    },
+    "messages": {
+      "fetchFailed": "获取对等点数据失败",
+      "fetchError": "加载对等点数据出错:",
+      "fetchErrorMessage": "加载对等点数据出错: "
+    },
+    "errors": {
+      "deleteFailed": "删除对等点失败",
+      "deleteError": "删除对等点错误:",
+      "deleteTryAgain": "删除对等点失败，请稍后重试"
+    },
+    "deleteModal": {
+      "title": "确认删除对等点",
+      "confirmText": "您确定要删除对等点 {{name}} 吗？此操作将从RouterOS中移除该对等点，无法撤销。",
+      "deleting": "删除中..."
+    },
+    "importedPeer": {
+      "title": "从RouterOS导入的对等点",
+      "description": "此对等点从RouterOS导入，包含临时生成的不可用私钥。如需导出配置文件，请在RouterOS原始系统中操作。"
+    }
+  },
+  "peers": {
+    "title": "WireGuard 对等点",
+    "createPeer": "创建对等点",
+    "syncFromRouterOS": "从RouterOS同步",
+    "syncing": "同步中...",
+    "refreshStatus": "刷新状态",
+    "updating": "更新中...",
+    "noPeers": "未找到对等点",
+    "unnamed": "未命名对等点",
+    "unknownInterface": "未知",
+    "imported": "已导入",
+    "importedPeerTooltip": "此对等点从RouterOS导入，包含临时生成的不可用私钥",
+    "hasComment": "(有备注)",
+    "syncSuccess": "同步成功！发现{{imported}}个新对等点，共{{total}}个对等点。",
+    "statusUpdateSuccess": "状态更新成功！已更新{{updated}}个对等点状态。",
+    "filters": {
+      "search": "搜索",
+      "interface": "接口",
+      "status": "状态",
+      "all": "全部",
+      "reset": "重置"
+    },
+    "table": {
+      "name": "名称",
+      "interface": "接口",
+      "allowedIPs": "允许的IP",
+      "status": "状态",
+      "lastHandshake": "最后握手",
+      "actions": "操作"
+    },
+    "actions": {
+      "viewDetails": "查看详情",
+      "edit": "编辑",
+      "delete": "删除",
+      "viewConfig": "查看配置"
+    },
+    "lastHandshake": {
+      "never": "从未",
+      "justNow": "刚刚",
+      "minutesAgo": "{{count}}分钟前",
+      "hoursAgo": "{{count}}小时前",
+      "daysAgo": "{{count}}天前"
+    },
+    "deleteModal": {
+      "title": "确认删除",
+      "confirmText": "您确定要删除对等点{{name}}吗？此操作无法撤销。",
+      "deleting": "删除中..."
+    },
+    "errors": {
+      "fetchFailed": "获取对等点列表失败",
+      "fetchError": "获取对等点列表错误:",
+      "fetchErrorMessage": "获取对等点列表失败，请检查网络连接或服务器状态",
+      "deleteFailed": "删除对等点失败",
+      "deleteError": "删除对等点错误:",
+      "deleteTryAgain": "删除对等点失败，请稍后重试",
+      "syncFailed": "同步对等点失败",
+      "syncError": "同步对等点错误:",
+      "syncTryAgain": "同步对等点失败，请稍后重试",
+      "statusUpdateFailed": "更新对等点状态失败",
+      "statusUpdateError": "更新对等点状态错误:",
+      "statusUpdateTryAgain": "更新对等点状态失败，请稍后重试"
+    }
+  },
+  "interfaceCreate": {
+    "title": "创建新的 WireGuard 接口",
+    "description": "配置一个新的 WireGuard 接口，创建后可以添加对等点来建立VPN连接。",
+    "form": {
+      "basicSettings": "基本设置",
+      "interfaceName": "接口名称",
+      "interfaceNameHelp": "给接口一个易记的名称，例如：主路由VPN",
+      "routerOSInterfaceName": "RouterOS接口名称",
+      "routerOSInterfaceNameHelp": "在RouterOS中使用的接口名称，如wg0，只能包含字母、数字、下划线和连字符",
+      "listenPort": "监听端口",
+      "listenPortHelp": "外部客户端将连接到此端口",
+      "generateRandomPort": "生成随机端口",
+      "address": "接口地址",
+      "addressHelp": "可选，WireGuard接口的IP地址/子网掩码，如10.0.0.1/24",
+      "mtu": "MTU",
+      "mtuHelp": "最大传输单元，通常使用默认值1420",
+      "enabled": "启用接口",
+      "enabledTooltip": "启用后接口将立即生效",
+      "comment": "备注",
+      "commentHelp": "可选，为此接口添加备注说明"
+    },
+    "note": "接口创建后将自动生成密钥对。创建接口时会在RouterOS上添加对应配置。",
+    "buttons": {
+      "cancel": "取消",
+      "create": "创建接口",
+      "creating": "创建中..."
+    },
+    "validation": {
+      "interfaceNameRequired": "接口名称不能为空",
+      "routerOSInterfaceNameRequired": "RouterOS接口名称不能为空",
+      "listenPortRequired": "监听端口不能为空",
+      "listenPortRange": "监听端口必须是1024-65535之间的有效端口号",
+      "mtuRange": "MTU值必须是1280-1500之间的有效数值"
+    },
+    "errors": {
+      "createFailed": "创建接口失败",
+      "createError": "创建接口错误:",
+      "createTryAgain": "创建接口失败，请稍后重试"
+    }
+  },
+  "dashboard": {
+    "title": "WireGuard 管理控制台",
+    "subtitle": "管理您的 RouterOS WireGuard VPN 配置",
+    "lastUpdated": "最后更新",
+    "refresh": "刷新数据",
+    "status": {
+      "title": "系统状态",
+      "online": "系统在线，运行正常",
+      "offline": "系统离线，请检查RouterOS连接",
+      "error": "系统状态检查失败",
+      "updatedAt": "更新于",
+      "checking": "正在检查系统状态..."
+    },
+    "cards": {
+      "interfaces": {
+        "title": "WireGuard 接口",
+        "action": "查看所有接口"
+      },
+      "peers": {
+        "title": "对等点",
+        "action": "查看所有对等点"
+      },
+      "router": {
+        "title": "RouterOS 连接",
+        "connected": "已连接",
+        "disconnected": "未连接",
+        "checkSettings": "请检查连接设置",
+        "checking": "检查中...",
+        "action": "查看连接设置"
+      }
+    },
+    "quickActions": {
+      "title": "快速操作",
+      "newInterface": {
+        "title": "创建新接口",
+        "description": "添加新的 WireGuard 接口"
+      },
+      "newPeer": {
+        "title": "创建新对等点",
+        "description": "为现有接口添加新的对等点"
+      },
+      "settings": {
+        "title": "系统设置",
+        "description": "配置 RouterOS 连接参数"
+      }
+    },
+    "recentPeers": {
+      "title": "最近的对等点",
+      "noPeers": "暂无对等点数据",
+      "createFirst": "创建第一个对等点",
+      "unnamed": "未命名对等点",
+      "unknown": "未知",
+      "notSetIP": "未设置IP",
+      "status": {
+        "online": "在线",
+        "enabled": "已启用",
+        "disabled": "已禁用",
+        "lastHandshake": "上次握手时间",
+        "never": "从未",
+        "justNow": "刚刚",
+        "minutesAgo": "分钟前",
+        "hoursAgo": "小时前",
+        "daysAgo": "天前",
+        "invalidTime": "无效时间",
+        "unknown": "未知"
+      }
+    },
+    "errors": {
+      "fetchFailed": "获取仪表盘数据失败，请检查网络连接或服务器状态"
+    }
+  },
+  "settings": {
+    "title": "系统设置",
+    "subtitle": "配置RouterOS连接和应用程序设置",
+    "update": "更新设置",
+    "updating": "更新中...",
+    "updateSuccess": "设置已更新",
+    "form": {
+      "routerOS": {
+        "title": "RouterOS连接设置",
+        "host": "主机地址",
+        "hostHelp": "RouterOS设备的IP地址或域名",
+        "port": "API端口",
+        "portHelp": "RouterOS API服务端口，默认为8728",
+        "ssl": "启用SSL/TLS",
+        "sslHelp": "使用安全连接",
+        "username": "用户名",
+        "usernameHelp": "RouterOS API用户名",
+        "password": "密码",
+        "passwordHelp": "RouterOS API密码",
+        "test": "测试连接",
+        "testing": "测试中...",
+        "testSuccess": "连接成功！",
+        "testError": "连接失败："
+      },
+      "server": {
+        "title": "服务器设置",
+        "address": "服务器地址",
+        "addressHelp": "公网IP或域名，用于生成客户端配置",
+        "port": "服务器端口",
+        "portHelp": "外部可访问的端口"
+      },
+      "general": {
+        "title": "常规设置",
+        "defaultDNS": "默认DNS",
+        "defaultDNSHelp": "客户端配置中使用的DNS服务器，多个地址用逗号分隔",
+        "language": "界面语言",
+        "languageHelp": "选择应用界面语言"
+      }
+    },
+    "errors": {
+      "required": "此字段不能为空",
+      "hostFormat": "主机地址格式不正确",
+      "invalidPort": "端口号必须是1-65535之间的数字",
+      "updateFailed": "更新设置失败",
+      "updateError": "更新设置错误:",
+      "testFailed": "连接测试失败"
+    },
+    "support": {
+      "title": "支持信息",
+      "documentation": "文档",
+      "viewDocs": "查看文档",
+      "reportIssue": "报告问题",
+      "contribute": "参与贡献",
+      "repository": "GitHub仓库"
+    }
+  },
+  "quickSetup": {
+    "title": "WireGuard快速设置",
+    "subtitle": "几分钟内创建WireGuard接口和客户端",
+    "headerTitle": "WireGuard快速设置向导",
+    "headerDescription": "快速创建接口和客户端配置，只需几个简单步骤",
+    "steps": {
+      "interface": "接口设置",
+      "peer": "对等点设置",
+      "complete": "完成"
+    },
+    "interface": {
+      "title": "接口设置",
+      "description": "首先配置WireGuard接口",
+      "useExisting": "选择接口",
+      "useExistingLabel": "使用现有接口",
+      "createNew": "创建新接口",
+      "selectInterface": "选择接口",
+      "interfaceNameLabel": "接口名称",
+      "interfaceNameHelp": "为此接口提供一个描述性名称",
+      "routerOSNameLabel": "RouterOS接口名称",
+      "routerOSNameHelp": "在RouterOS中使用的名称（如wg0）",
+      "listenPortLabel": "监听端口",
+      "listenPortHelp": "WireGuard将在此端口监听连接",
+      "addressLabel": "接口地址",
+      "addressHelp": "可选，接口的IP地址（如10.0.0.1/24）",
+      "mtuLabel": "MTU",
+      "mtuHelp": "可选，最大传输单元（默认1420）"
+    },
+    "peer": {
+      "title": "对等点设置",
+      "description": "配置连接到此接口的客户端",
+      "peerNameLabel": "对等点名称",
+      "peerNameHelp": "为此客户端提供一个易于识别的名称",
+      "allowedIPsLabel": "允许的IP",
+      "allowedIPsHelp": "此客户端允许使用的IP地址（如10.0.0.2/32）",
+      "persistentKeepaliveLabel": "保活间隔",
+      "persistentKeepaliveHelp": "可选，默认为25秒",
+      "defaultName": "客户端1"
+    },
+    "complete": {
+      "success": "WireGuard配置创建成功！",
+      "configTitle": "客户端配置",
+      "downloadConfig": "下载配置文件",
+      "viewInterfaces": "查看接口列表"
+    }
+  },
+  "notFound": {
+    "title": "页面未找到",
+    "message": "您访问的页面不存在或已删除。"
+  },
+  "deprecation": {
+    "peerDetailComponent": "警告: PeerDetail 组件已被废除，请使用 PeerDetails 组件替代。该组件将在未来版本中移除。"
+  },
+  "peerConfig": {
+    "title": "WireGuard客户端配置",
+    "qrCode": "显示二维码",
+    "downloadConfig": "下载配置",
+    "importedPeerWarning": "此对等点是从RouterOS导入的，不包含有效的私钥，无法导出配置。请在RouterOS中导出此对等点的配置。",
+    "noConfigAvailable": "无法获取客户端配置，此对等点没有可用的私钥。",
+    "qrCodeDialog": {
+      "title": "WireGuard配置二维码",
+      "scanInstructions": "使用您设备上的WireGuard应用程序扫描此二维码以导入配置。",
+      "closeButton": "关闭"
+    },
+    "usageInstructions": {
+      "title": "配置使用说明",
+      "steps": [
+        "将此配置文件下载或复制到您的客户端设备",
+        "在WireGuard应用中导入配置文件或扫描二维码",
+        "激活连接，即可安全连接到您的VPN服务器"
+      ]
+    },
+    "errors": {
+      "importedPeerNoConfig": "无法导出配置，此对等点没有可用的私钥",
+      "downloadFailed": "下载失败: ",
+      "fetchConfigFailed": "获取配置失败",
+      "fetchConfigError": "获取配置出错:",
+      "fetchConfigErrorMessage": "获取配置出错: ",
+      "downloadConfigError": "下载配置出错:"
+    }
+  },
+  "peerDetail": {
+    "_DEPRECATED_": "此命名空间已废除，请使用 peerDetails 命名空间替代",
+    "basicInfo": {
+      "title": "基本信息",
+      "name": "名称",
+      "interface": "接口",
+      "allowedIPs": "允许的IP",
+      "persistentKeepalive": "保持连接",
+      "status": "状态",
+      "enabled": "已启用",
+      "disabled": "已禁用",
+      "comment": "备注",
+      "unknown": "未知"
+    },
+    "connectionStatus": {
+      "title": "连接状态",
+      "refreshButton": "刷新状态",
+      "lastHandshake": "最后握手时间",
+      "publicKey": "公钥",
+      "handshakeTime": {
+        "never": "从未",
+        "justNow": "刚刚",
+        "minutesAgo": "{{count}}分钟前",
+        "hoursAgo": "{{count}}小时前",
+        "daysAgo": "{{count}}天前"
+      },
+      "importedPeerInfo": "此对等点是从RouterOS导入的，不包含有效的私钥。"
+    },
+    "errors": {
+      "updateStatusFailed": "更新状态失败",
+      "updateStatusError": "更新对等点状态出错:"
+    }
+  },
+  "peerEdit": {
+    "title": "编辑对等点",
+    "keyModes": {
+      "title": "密钥配置模式",
+      "auto": "自动生成",
+      "manual": "手动输入",
+      "tooltip": "选择如何配置此对等点的密钥"
+    },
+    "fields": {
+      "name": {
+        "label": "名称",
+        "helper": "为此对等点设置一个易于识别的名称"
+      },
+      "interface": {
+        "label": "WireGuard接口",
+        "helper": "选择此对等点使用的接口"
+      },
+      "publicKey": {
+        "label": "公钥",
+        "helper": {
+          "manual": "输入客户端生成的公钥",
+          "auto": "自动生成的公钥"
+        },
+        "copyTooltip": "复制公钥"
+      },
+      "privateKey": {
+        "label": "私钥",
+        "helper": "此私钥用于客户端配置，请妥善保管",
+        "showTooltip": "显示私钥",
+        "hideTooltip": "隐藏私钥",
+        "copyTooltip": "复制私钥"
+      },
+      "allowedIPs": {
+        "label": "允许的IP",
+        "helper": {
+          "suggested": "已自动填入推荐的IP地址",
+          "manual": "CIDR格式的IP地址列表，如：192.168.1.0/24,10.0.0.0/24"
+        },
+        "suggestedTooltip": "此IP是系统自动推荐的可用地址"
+      },
+      "persistentKeepalive": {
+        "label": "保持连接",
+        "helper": "保持连接活跃的时间间隔（秒）。建议值为25",
+        "tooltip": "保持连接活跃的时间间隔（秒）。建议值为25"
+      },
+      "comment": {
+        "label": "备注",
+        "helper": "可选：添加关于此对等点的备注"
+      },
+      "enabled": {
+        "label": "启用此对等点"
+      }
+    },
+    "buttons": {
+      "save": "保存",
+      "cancel": "取消",
+      "generateKeys": "生成密钥对"
+    },
+    "validation": {
+      "nameRequired": "名称不能为空",
+      "allowedIPsRequired": "允许的IP不能为空",
+      "allowedIPsFormat": "允许的IP格式不正确，应为CIDR格式（例如：192.168.1.0/24）",
+      "interfaceRequired": "必须选择WireGuard接口",
+      "publicKeyRequired": "公钥不能为空",
+      "publicKeyFormat": "公钥格式不正确",
+      "privateKeyRequired": "私钥不能为空"
+    },
+    "errors": {
+      "fetchInterfacesFailed": "获取接口列表失败",
+      "fetchInterfacesError": "加载接口列表出错: ",
+      "suggestIPError": "获取建议IP错误: ",
+      "generateKeysFailed": "生成密钥对失败",
+      "generateKeysError": "生成密钥对时出错: ",
+      "updatePeerFailed": "更新对等点失败",
+      "updatePeerError": "更新对等点时出错: "
+    }
+  },
+  "peerConfigPage": {
+    "title": "{name} - 客户端配置",
+    "subtitle": "将此配置导入到客户端设备的WireGuard应用中即可连接VPN。",
+    "configContent": "配置文件内容",
+    "tabs": {
+      "configInfo": "配置信息",
+      "connectionGuide": "连接指南",
+      "ariaLabel": "配置标签页"
+    },
+    "actions": {
+      "copyConfig": "复制配置",
+      "downloadConfig": "下载配置文件",
+      "showQRCode": "显示二维码"
+    },
+    "fields": {
+      "serverEndpoint": "服务器地址",
+      "serverPort": "服务器端口",
+      "allowedIPs": "允许的IP",
+      "dns": "DNS",
+      "persistentKeepalive": "保持连接",
+      "status": "状态",
+      "notSet": "未设置",
+      "enabled": "已启用",
+      "disabled": "已禁用",
+      "seconds": "{value} 秒",
+      "disabled2": "未启用"
+    },
+    "instructions": {
+      "mobile": {
+        "title": "移动设备 (Android/iOS)",
+        "step1": "打开 WireGuard 应用，点击\"添加隧道\"",
+        "step2": "选择\"扫描二维码\"或\"从文件导入\"",
+        "step3": "对于二维码：点击上方的\"显示二维码\"按钮，然后使用应用扫描",
+        "step4": "对于文件导入：点击上方的\"下载配置文件\"按钮，将文件发送到您的设备，然后在应用中导入"
+      },
+      "windows": {
+        "title": "Windows",
+        "step1": "点击上方的\"下载配置文件\"按钮",
+        "step2": "打开 WireGuard 应用，点击\"导入隧道\"，选择下载的配置文件",
+        "step3": "点击\"激活\"按钮即可连接"
+      },
+      "linux": {
+        "title": "Linux",
+        "step1": "点击上方的\"下载配置文件\"按钮"
+      }
+    },
+    "qrCode": {
+      "title": "WireGuard 配置二维码",
+      "altText": "WireGuard 配置二维码"
+    },
+    "errors": {
+      "invalidConfigFormat": "返回的配置数据格式不正确",
+      "fetchConfigError": "获取配置信息错误:",
+      "fetchConfigFailed": "获取配置信息失败，请检查网络连接或服务器状态",
+      "generateQRError": "生成二维码错误:",
+      "generateQRFailed": "生成二维码失败，请尝试下载配置文件"
+    }
+  }
+} 

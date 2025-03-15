@@ -1,0 +1,48 @@
+{
+  "name": "server",
+  "version": "0.1.0",
+  "description": "RouterOS WireGuard配置管理工具后端",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wminjay/routeros-wireguard-manager.git"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "test": "echo \"No tests defined\" && exit 0"
+  },
+  "keywords": [
+    "routeros",
+    "wireguard",
+    "vpn",
+    "config"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "common": "0.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.1",
+    "mikrotik-node": "1.0.0",
+    "morgan": "^1.10.0",
+    "sequelize": "^6.32.1",
+    "sqlite3": "^5.1.6",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
+    "umzug": "^3.8.2",
+    "wireguard-tools": "^0.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "nodemon": "^3.0.1"
+  }
+}

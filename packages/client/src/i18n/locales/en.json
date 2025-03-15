@@ -1,0 +1,773 @@
+{
+  "app": {
+    "title": "WireGuard Manager",
+    "fullTitle": "RouterOS WireGuard Configuration Manager"
+  },
+  "menu": {
+    "home": "Home",
+    "interfaces": "WireGuard Interfaces",
+    "peers": "Peers",
+    "quickSetup": "Quick Setup",
+    "settings": "Settings",
+    "language": "Language"
+  },
+  "language": {
+    "switchLabel": "Change Language",
+    "current": "Current language",
+    "switchLabelBilingual": "Change Language / 切换语言"
+  },
+  "status": {
+    "connected": "Connected",
+    "disconnected": "Disconnected"
+  },
+  "errors": {
+    "routerStatus": "Error fetching RouterOS status",
+    "connectionError": "Connection error",
+    "fetchInterfacesFailed": "Failed to fetch interfaces list",
+    "fetchInterfaces": "Error fetching interfaces:",
+    "fetchInterfacesCheckConnection": "Failed to fetch interfaces list, please check network connection or server status",
+    "suggestedIPError": "Error fetching suggested IP:",
+    "generateKeysFailed": "Failed to generate key pair",
+    "generateKeysError": "Error while generating key pair:",
+    "generateKeysErrorMessage": "Error while generating key pair: "
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "create": "Create",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "copied": "Copied"
+  },
+  "interfaces": {
+    "title": "WireGuard Interfaces",
+    "createInterface": "Create Interface",
+    "syncFromRouterOS": "Sync from RouterOS",
+    "syncing": "Syncing...",
+    "noInterfaces": "No Interfaces",
+    "noInterfacesDescription": "You haven't created any WireGuard interfaces yet. Click the button below to create your first interface.",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "table": {
+      "name": "Name",
+      "listenPort": "Listen Port",
+      "peerCount": "Peer Count",
+      "mtu": "MTU",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "viewPeers": "View Peers",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "deleteModal": {
+      "title": "Confirm Interface Deletion",
+      "confirmText": "Are you sure you want to delete interface \"{name}\"? This action will delete all peers associated with this interface and cannot be undone.",
+      "deleting": "Deleting...",
+      "confirmDelete": "Confirm Delete"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch interfaces list",
+      "fetchError": "Error fetching interfaces list:",
+      "fetchErrorMessage": "Failed to fetch interfaces list, please check network connection or server status",
+      "deleteFailed": "Failed to delete interface",
+      "deleteError": "Error deleting interface:",
+      "deleteTryAgain": "Failed to delete interface, please try again later",
+      "syncFailed": "Failed to sync interfaces",
+      "syncError": "Error syncing interfaces:",
+      "syncTryAgain": "Failed to sync interfaces, please try again later"
+    },
+    "syncSuccess": "Sync successful! Found {{imported}} new interfaces, total {{total}} interfaces."
+  },
+  "interfaceDetail": {
+    "backToInterfaces": "Back to Interfaces",
+    "updateSuccess": "Interface updated successfully",
+    "copySuccess": "Copied to clipboard",
+    "copyError": "Copy failed:",
+    "tabsAriaLabel": "Interface detail tabs",
+    "tabs": {
+      "info": "Interface Info",
+      "peers": "Peers"
+    },
+    "form": {
+      "name": "Interface Name",
+      "listenPort": "Listen Port",
+      "mtu": "MTU",
+      "enabled": "Enabled",
+      "comment": "Comment"
+    },
+    "info": {
+      "title": "Interface Information",
+      "interfaceName": "Interface Name",
+      "displayName": "Display Name",
+      "listenPort": "Listen Port",
+      "mtu": "MTU",
+      "status": "Status",
+      "comment": "Comment"
+    },
+    "keys": {
+      "title": "Key Information",
+      "publicKey": "Public Key",
+      "privateKey": "Private Key",
+      "copyPublicKey": "Copy Public Key",
+      "copyPrivateKey": "Copy Private Key",
+      "showPrivateKey": "Show Private Key",
+      "hidePrivateKey": "Hide Private Key",
+      "privateKeyWarning": "Note: Private key is confidential information, do not share it with others."
+    },
+    "peers": {
+      "title": "Peers List",
+      "refreshStatus": "Refresh Peer Status",
+      "refreshSuccess": "Refresh Successful",
+      "addPeer": "Add Peer",
+      "addFirstPeer": "Add First Peer",
+      "noPeers": "No peers configured yet",
+      "online": "Online",
+      "lastHandshake": "Last handshake time: {{time}}",
+      "neverConnected": "Never connected",
+      "noComment": "No comment",
+      "viewConfig": "View Client Config",
+      "timeAgo": {
+        "seconds": "{{count}} seconds ago",
+        "minutes": "{{count}} minutes ago",
+        "hours": "{{count}} hours ago",
+        "days": "{{count}} days ago"
+      }
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch interface details",
+      "fetchError": "Error fetching interface details:",
+      "fetchErrorMessage": "Failed to fetch interface details, please check network connection or server status",
+      "updateFailed": "Failed to update interface",
+      "updateError": "Error updating interface:",
+      "updateTryAgain": "Failed to update interface, please try again later",
+      "refreshPeersFailed": "Failed to refresh peer status",
+      "refreshPeersError": "Error refreshing peer status:",
+      "refreshPeersErrorMessage": "Failed to refresh peer status: "
+    }
+  },
+  "peerConfig": {
+    "title": "WireGuard Client Configuration",
+    "qrCode": "Show QR Code",
+    "downloadConfig": "Download Config",
+    "importedPeerWarning": "This peer was imported from RouterOS and does not contain a valid private key. Configuration cannot be exported. Please export the configuration for this peer from RouterOS.",
+    "noConfigAvailable": "Unable to get client configuration, this peer has no available private key.",
+    "qrCodeDialog": {
+      "title": "WireGuard Configuration QR Code",
+      "scanInstructions": "Scan this QR code with the WireGuard app on your device to import the configuration.",
+      "closeButton": "Close"
+    },
+    "usageInstructions": {
+      "title": "Configuration Usage Instructions",
+      "steps": [
+        "Download or copy this configuration file to your client device",
+        "Import the configuration file or scan the QR code in the WireGuard app",
+        "Activate the connection to securely connect to your VPN server"
+      ]
+    },
+    "errors": {
+      "importedPeerNoConfig": "Cannot export configuration, this peer does not have an available private key.",
+      "downloadFailed": "Download failed: ",
+      "fetchConfigFailed": "Failed to fetch configuration",
+      "fetchConfigError": "Error fetching configuration:",
+      "fetchConfigErrorMessage": "Error fetching configuration: ",
+      "downloadConfigError": "Error downloading configuration:"
+    }
+  },
+  "peerCreate": {
+    "title": "Create New Peer",
+    "description": "Configure a new client peer. After creation, you can export the configuration file or QR code for the client.",
+    "backButton": "Back",
+    "noInterfaces": "No available interfaces, please create an interface first",
+    "createInterface": "Create Interface",
+    "validation": {
+      "nameRequired": "Peer name cannot be empty",
+      "interfaceRequired": "An interface must be selected",
+      "allowedIPsRequired": "Allowed IPs cannot be empty",
+      "allowedIPsFormat": "Incorrect IP format, correct format example: 10.0.0.2/32",
+      "keepaliveRange": "Keepalive interval must be a value between 0-1000, 0 to disable",
+      "publicKeyRequired": "Public key cannot be empty",
+      "publicKeyFormat": "Incorrect public key format"
+    },
+    "form": {
+      "basicSettings": "Basic Settings",
+      "peerName": "Peer Name",
+      "peerNameHelp": "Give the peer a memorable name, e.g.: Phone-John",
+      "selectInterface": "Select Interface",
+      "selectInterfacePlaceholder": "Please select a WireGuard interface",
+      "keySettings": "Key Configuration Method",
+      "keySettingsHelp": "Choose how to configure the peer's keys",
+      "keyModeAuto": "Server generates keys",
+      "keyModeManual": "Use existing public key",
+      "autoKeyInfo": "The server will automatically generate a public and private key. The private key is used for client configuration and should be kept secure.",
+      "manualKeyInfo": "Use a public key generated by the client. The private key should remain on the client device and never be shared.",
+      "generatedPublicKey": "Generated Public Key",
+      "copyPublicKey": "Copy Public Key",
+      "copied": "Copied",
+      "regenerateKeyPair": "Regenerate Key Pair",
+      "regenerating": "Generating...",
+      "publicKeyLabel": "Public Key",
+      "publicKeyHelp": "Enter the public key generated by the client, should be Base64 encoded",
+      "allowedIPs": "Allowed IPs",
+      "allowedIPsHelp": "Client IP address, e.g.: 10.0.0.2/32",
+      "suggestedIP": "A recommended IP address has been automatically filled in",
+      "suggestedIPTooltip": "This IP is automatically recommended by the system",
+      "persistentKeepalive": "Persistent Keepalive (seconds)",
+      "persistentKeepaliveHelp": "Interval to keep the connection active, set to 0 to disable",
+      "enablePeer": "Enable Peer",
+      "enablePeerTooltip": "The peer will be active immediately when enabled",
+      "comment": "Comment",
+      "commentHelp": "Optional, add a comment for this peer",
+      "note": "A key pair will be automatically generated when the peer is created. Peer configuration will be added to RouterOS.",
+      "cancel": "Cancel",
+      "createPeer": "Create Peer",
+      "creating": "Creating..."
+    }
+  },
+  "peerDetails": {
+    "title": "Peer Details",
+    "backButton": "Back",
+    "refreshTooltip": "Refresh",
+    "deleteTooltip": "Delete",
+    "breadcrumbs": {
+      "home": "Home",
+      "interfacesList": "Interfaces List",
+      "interfacePeers": "Interface Peers",
+      "peersList": "Peers List"
+    },
+    "tabs": {
+      "basicInfo": "Basic Information",
+      "editSettings": "Edit Settings",
+      "clientConfig": "Client Configuration"
+    },
+    "messages": {
+      "fetchFailed": "Failed to fetch peer data",
+      "fetchError": "Error loading peer data:",
+      "fetchErrorMessage": "Error loading peer data: "
+    },
+    "errors": {
+      "deleteFailed": "Failed to delete peer",
+      "deleteError": "Error deleting peer:",
+      "deleteTryAgain": "Failed to delete peer, please try again later"
+    },
+    "deleteModal": {
+      "title": "Confirm Peer Deletion",
+      "confirmText": "Are you sure you want to delete peer {{name}}? This action will remove the peer from RouterOS and cannot be undone.",
+      "deleting": "Deleting..."
+    },
+    "importedPeer": {
+      "title": "Imported RouterOS Peer",
+      "description": "This peer was imported from RouterOS and contains a temporary placeholder private key. To export a configuration file, please do so from the original RouterOS system."
+    }
+  },
+  "peers": {
+    "title": "WireGuard Peers",
+    "createPeer": "Create Peer",
+    "syncFromRouterOS": "Sync from RouterOS",
+    "syncing": "Syncing...",
+    "refreshStatus": "Refresh Status",
+    "updating": "Updating...",
+    "noPeers": "No peers found",
+    "unnamed": "Unnamed Peer",
+    "unknownInterface": "Unknown",
+    "imported": "Imported",
+    "importedPeerTooltip": "This peer was imported from RouterOS and contains a temporary placeholder private key",
+    "hasComment": "(has comment)",
+    "syncSuccess": "Sync successful! Found {{imported}} new peers, total {{total}} peers.",
+    "statusUpdateSuccess": "Status update successful! Updated {{updated}} peers status.",
+    "filters": {
+      "search": "Search",
+      "interface": "Interface",
+      "status": "Status",
+      "all": "All",
+      "reset": "Reset"
+    },
+    "table": {
+      "name": "Name",
+      "interface": "Interface",
+      "allowedIPs": "Allowed IPs",
+      "status": "Status",
+      "lastHandshake": "Last Handshake",
+      "actions": "Actions"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "edit": "Edit",
+      "delete": "Delete",
+      "viewConfig": "View Config"
+    },
+    "lastHandshake": {
+      "never": "Never",
+      "justNow": "Just now",
+      "minutesAgo": "{{count}} minutes ago",
+      "hoursAgo": "{{count}} hours ago",
+      "daysAgo": "{{count}} days ago"
+    },
+    "deleteModal": {
+      "title": "Confirm Deletion",
+      "confirmText": "Are you sure you want to delete peer \"{{name}}\"? This action cannot be undone.",
+      "deleting": "Deleting..."
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch peers list",
+      "fetchError": "Error fetching peers list:",
+      "fetchErrorMessage": "Failed to fetch peers list, please check network connection or server status",
+      "deleteFailed": "Failed to delete peer",
+      "deleteError": "Error deleting peer:",
+      "deleteTryAgain": "Failed to delete peer, please try again later",
+      "syncFailed": "Failed to sync peers",
+      "syncError": "Error syncing peers:",
+      "syncTryAgain": "Failed to sync peers, please try again later",
+      "statusUpdateFailed": "Failed to update peers status",
+      "statusUpdateError": "Error updating peers status:",
+      "statusUpdateTryAgain": "Failed to update peers status, please try again later"
+    }
+  },
+  "interfaceCreate": {
+    "title": "Create New WireGuard Interface",
+    "description": "Configure a new WireGuard interface, which can then be used to add peers for VPN connections.",
+    "form": {
+      "basicSettings": "Basic Settings",
+      "interfaceName": "Interface Name",
+      "interfaceNameHelp": "Give the interface a memorable name, e.g.: Main Router VPN",
+      "routerOSInterfaceName": "RouterOS Interface Name",
+      "routerOSInterfaceNameHelp": "Name used in RouterOS, like wg0. Only letters, numbers, underscores and hyphens allowed",
+      "listenPort": "Listen Port",
+      "listenPortHelp": "External clients will connect to this port",
+      "generateRandomPort": "Generate Random Port",
+      "address": "Interface Address",
+      "addressHelp": "Optional, IP address/netmask for the WireGuard interface, e.g. 10.0.0.1/24",
+      "mtu": "MTU",
+      "mtuHelp": "Maximum Transmission Unit, usually the default value of 1420 is fine",
+      "enabled": "Enable Interface",
+      "enabledTooltip": "The interface will be active immediately when enabled",
+      "comment": "Comment",
+      "commentHelp": "Optional, add a comment for this interface"
+    },
+    "note": "A key pair will be automatically generated when the interface is created. Interface configuration will be added to RouterOS.",
+    "buttons": {
+      "cancel": "Cancel",
+      "create": "Create Interface",
+      "creating": "Creating..."
+    },
+    "validation": {
+      "interfaceNameRequired": "Interface name cannot be empty",
+      "routerOSInterfaceNameRequired": "RouterOS interface name cannot be empty",
+      "listenPortRequired": "Listen port cannot be empty",
+      "listenPortRange": "Listen port must be a valid port number between 1024-65535",
+      "mtuRange": "MTU value must be a valid number between 1280-1500"
+    },
+    "errors": {
+      "createFailed": "Failed to create interface",
+      "createError": "Error creating interface:",
+      "createTryAgain": "Failed to create interface, please try again later"
+    }
+  },
+  "dashboard": {
+    "title": "WireGuard Management Console",
+    "subtitle": "Manage your RouterOS WireGuard VPN configuration",
+    "lastUpdated": "Last updated",
+    "refresh": "Refresh data",
+    "status": {
+      "title": "System Status",
+      "online": "System online, running normally",
+      "offline": "System offline, please check RouterOS connection",
+      "error": "System status check failed",
+      "updatedAt": "Updated at",
+      "checking": "Checking system status..."
+    },
+    "cards": {
+      "interfaces": {
+        "title": "WireGuard Interfaces",
+        "action": "View all interfaces"
+      },
+      "peers": {
+        "title": "Peers",
+        "action": "View all peers"
+      },
+      "router": {
+        "title": "RouterOS Connection",
+        "connected": "Connected",
+        "disconnected": "Disconnected",
+        "checkSettings": "Please check connection settings",
+        "checking": "Checking...",
+        "action": "View connection settings"
+      }
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "newInterface": {
+        "title": "Create New Interface",
+        "description": "Add a new WireGuard interface"
+      },
+      "newPeer": {
+        "title": "Create New Peer",
+        "description": "Add a new peer to existing interface"
+      },
+      "settings": {
+        "title": "System Settings",
+        "description": "Configure RouterOS connection parameters"
+      }
+    },
+    "recentPeers": {
+      "title": "Recent Peers",
+      "noPeers": "No peer data available",
+      "createFirst": "Create your first peer",
+      "unnamed": "Unnamed Peer",
+      "unknown": "Unknown",
+      "notSetIP": "No IP set",
+      "status": {
+        "online": "Online",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "lastHandshake": "Last handshake time",
+        "never": "Never",
+        "justNow": "Just now",
+        "minutesAgo": "minutes ago",
+        "hoursAgo": "hours ago",
+        "daysAgo": "days ago",
+        "invalidTime": "Invalid time",
+        "unknown": "Unknown"
+      }
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch dashboard data, please check network connection or server status"
+    }
+  },
+  "settings": {
+    "title": "System Settings",
+    "subtitle": "Configure RouterOS connection parameters and global settings",
+    "saveSuccess": "Settings saved successfully",
+    "saveButton": "Save Settings",
+    "saving": "Saving...",
+    "routerOS": {
+      "title": "RouterOS Connection Settings",
+      "connectionStatus": "RouterOS Connection Status",
+      "device": "RouterOS Device",
+      "address": "RouterOS Address",
+      "addressHelp": "IP address or hostname, e.g.: 192.168.1.1",
+      "port": "API Port",
+      "portHelp": "RouterOS API port, default is 8728 (unencrypted)",
+      "username": "Username",
+      "usernameHelp": "RouterOS login username",
+      "password": "Password",
+      "passwordHelp": "RouterOS login password",
+      "togglePassword": "Toggle password visibility"
+    },
+    "status": {
+      "connected": "Connected to {{model}} {{version}}",
+      "disconnected": "Not connected to RouterOS, please check connection settings",
+      "unknown": "Unknown status, please test connection"
+    },
+    "test": {
+      "button": "Test Connection",
+      "success": "Connection test successful, RouterOS version: {{version}}, model: {{model}}",
+      "failed": "Connection test failed, please check connection parameters",
+      "unknown": "Unknown"
+    },
+    "wireguard": {
+      "title": "WireGuard Global Settings",
+      "defaultDNS": "Default DNS Servers",
+      "defaultDNSHelp": "DNS servers used in client configurations, comma separated"
+    },
+    "client": {
+      "title": "Client Configuration Settings",
+      "serverAddress": "Server Address",
+      "serverAddressHelp": "Public IP or domain name used for client connections",
+      "serverPort": "Server Port",
+      "serverPortHelp": "Server WireGuard listen port, leave empty to use interface default port"
+    },
+    "system": {
+      "title": "System Information",
+      "version": "Version Information",
+      "systemVersion": "System Version",
+      "apiVersion": "API Version",
+      "license": "License"
+    },
+    "support": {
+      "title": "Support Information",
+      "documentation": "Documentation",
+      "viewDocs": "View Documentation",
+      "reportIssue": "Report Issue",
+      "contribute": "Contribute",
+      "repository": "GitHub Repository"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch settings",
+      "fetchError": "Error fetching settings:",
+      "fetchErrorMessage": "Failed to fetch settings, please check network connection or server status",
+      "saveFailed": "Failed to save settings",
+      "saveError": "Error saving settings:",
+      "saveTryAgain": "Failed to save settings, please try again later",
+      "testError": "Error testing connection:",
+      "testErrorMessage": "Connection test failed, please check network connection or server status"
+    }
+  },
+  "quickSetup": {
+    "pageTitle": "WireGuard Quick Setup",
+    "pageSubtitle": "Quickly create WireGuard configuration in a few simple steps",
+    "success": "WireGuard configuration created successfully!",
+    "unknownStep": "Unknown step",
+    "errors": {
+      "createFailed": "Creation failed",
+      "setupFailed": "Quick setup failed"
+    },
+    "steps": {
+      "basicInfo": "Basic Info",
+      "interfaceConfig": "Interface Config",
+      "peerConfig": "Peer Config",
+      "complete": "Complete"
+    },
+    "navigation": {
+      "back": "Back",
+      "next": "Next",
+      "create": "Create"
+    },
+    "basicInfo": {
+      "title": "Basic Settings",
+      "subtitle": "Please provide basic information about your RouterOS router",
+      "routerIpLabel": "Router IP Address",
+      "routerIpHelp": "Public IP address or domain name of the RouterOS router",
+      "commentLabel": "Comment",
+      "commentHelp": "Optional, description for this configuration"
+    },
+    "interfaceConfig": {
+      "title": "WireGuard Interface Configuration",
+      "subtitle": "Configure the WireGuard interface on RouterOS",
+      "createNew": "Create new interface",
+      "useExisting": "Use existing interface",
+      "selectInterface": "Select interface",
+      "loading": "Loading...",
+      "noInterfaces": "No available interfaces",
+      "interfaceNameLabel": "Interface Name",
+      "interfaceNameHelp": "Interface name in RouterOS, e.g. wg0",
+      "displayNameLabel": "Display Name",
+      "displayNameHelp": "Interface name displayed in this system",
+      "listenPortLabel": "Listen Port",
+      "listenPortHelp": "UDP port for WireGuard to listen on",
+      "addressLabel": "Interface Address",
+      "addressHelp": "WireGuard interface IP address/netmask, e.g. 10.0.0.1/24",
+      "mtuLabel": "MTU",
+      "mtuHelp": "Optional, default is 1420"
+    },
+    "peer": {
+      "defaultName": "Client1"
+    },
+    "peerConfig": {
+      "title": "WireGuard Peer Configuration",
+      "subtitle": "Configure the client device connecting to RouterOS",
+      "peerNameLabel": "Peer Name",
+      "peerNameHelp": "Name of the client device",
+      "allowedIPsLabel": "Allowed IP Addresses",
+      "allowedIPsHelp": "IP address/netmask assigned to the client, e.g. 10.0.0.2/32",
+      "refreshIPTooltip": "Refresh suggested IP",
+      "keepaliveLabel": "Persistent Keepalive Interval",
+      "keepaliveHelp": "Optional, default is 25 seconds"
+    },
+    "complete": {
+      "success": "WireGuard configuration created successfully!",
+      "configTitle": "Client Configuration",
+      "downloadConfig": "Download Configuration File",
+      "viewInterfaces": "View Interface List"
+    }
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "subtitle": "The page you are looking for does not exist or has been moved."
+  },
+  "deprecation": {
+    "peerDetailComponent": "Warning: PeerDetail component is deprecated, use PeerDetails component instead. This component will be removed in a future version."
+  },
+  "peerDetail": {
+    "_DEPRECATED_": "This namespace is deprecated, use peerDetails instead",
+    "basicInfo": {
+      "title": "Basic Information",
+      "name": "Name",
+      "interface": "Interface",
+      "allowedIPs": "Allowed IPs",
+      "persistentKeepalive": "Persistent Keepalive",
+      "status": "Status",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "comment": "Comment",
+      "unknown": "Unknown"
+    },
+    "connectionStatus": {
+      "title": "Connection Status",
+      "refreshButton": "Refresh Status",
+      "lastHandshake": "Last Handshake",
+      "publicKey": "Public Key",
+      "handshakeTime": {
+        "never": "Never",
+        "justNow": "Just now",
+        "minutesAgo": "{{count}} minutes ago",
+        "hoursAgo": "{{count}} hours ago",
+        "daysAgo": "{{count}} days ago"
+      },
+      "importedPeerInfo": "This peer was imported from RouterOS and does not contain a valid private key."
+    },
+    "errors": {
+      "updateStatusFailed": "Failed to update status",
+      "updateStatusError": "Error updating peer status:"
+    }
+  },
+  "peerEdit": {
+    "title": "Edit Peer",
+    "keyModes": {
+      "title": "Key Configuration Mode",
+      "auto": "Auto-generate",
+      "manual": "Manual input",
+      "tooltip": "Choose how to configure the keys for this peer"
+    },
+    "fields": {
+      "name": {
+        "label": "Name",
+        "helper": "Set an easy to recognize name for this peer"
+      },
+      "interface": {
+        "label": "WireGuard Interface",
+        "helper": "Select the interface for this peer"
+      },
+      "publicKey": {
+        "label": "Public Key",
+        "helper": {
+          "manual": "Enter the client-generated public key",
+          "auto": "Auto-generated public key"
+        },
+        "copyTooltip": "Copy public key"
+      },
+      "privateKey": {
+        "label": "Private Key",
+        "helper": "This private key is used for client configuration, please keep it secure",
+        "showTooltip": "Show private key",
+        "hideTooltip": "Hide private key",
+        "copyTooltip": "Copy private key"
+      },
+      "allowedIPs": {
+        "label": "Allowed IPs",
+        "helper": {
+          "suggested": "Automatically filled with a recommended IP address",
+          "manual": "IP addresses in CIDR format, e.g.: 192.168.1.0/24,10.0.0.0/24"
+        },
+        "suggestedTooltip": "This IP is automatically recommended by the system"
+      },
+      "persistentKeepalive": {
+        "label": "Persistent Keepalive",
+        "helper": "Time interval in seconds to keep the connection active. Recommended value is 25",
+        "tooltip": "Time interval in seconds to keep the connection active. Recommended value is 25"
+      },
+      "comment": {
+        "label": "Comment",
+        "helper": "Optional: Add a note about this peer"
+      },
+      "enabled": {
+        "label": "Enable this peer"
+      }
+    },
+    "buttons": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "generateKeys": "Generate Key Pair"
+    },
+    "validation": {
+      "nameRequired": "Name cannot be empty",
+      "allowedIPsRequired": "Allowed IPs cannot be empty",
+      "allowedIPsFormat": "Incorrect IP format, should be in CIDR format (e.g.: 192.168.1.0/24)",
+      "interfaceRequired": "Must select a WireGuard interface",
+      "publicKeyRequired": "Public key cannot be empty",
+      "publicKeyFormat": "Public key format is incorrect",
+      "privateKeyRequired": "Private key cannot be empty"
+    },
+    "errors": {
+      "fetchInterfacesFailed": "Failed to fetch interfaces list",
+      "fetchInterfacesError": "Error loading interfaces list: ",
+      "suggestIPError": "Error getting suggested IP: ",
+      "generateKeysFailed": "Failed to generate key pair",
+      "generateKeysError": "Error generating key pair: ",
+      "updatePeerFailed": "Failed to update peer",
+      "updatePeerError": "Error updating peer: "
+    }
+  },
+  "peerConfigPage": {
+    "title": "{name} - Client Configuration",
+    "subtitle": "Import this configuration into a WireGuard application on your client device to connect to the VPN.",
+    "configContent": "Configuration File Content",
+    "tabs": {
+      "configInfo": "Configuration Info",
+      "connectionGuide": "Connection Guide",
+      "ariaLabel": "Configuration tabs"
+    },
+    "actions": {
+      "copyConfig": "Copy Configuration",
+      "downloadConfig": "Download Config File",
+      "showQRCode": "Show QR Code"
+    },
+    "fields": {
+      "serverEndpoint": "Server Address",
+      "serverPort": "Server Port",
+      "allowedIPs": "Allowed IPs",
+      "dns": "DNS",
+      "persistentKeepalive": "Persistent Keepalive",
+      "status": "Status",
+      "notSet": "Not Set",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "seconds": "{value} seconds",
+      "disabled2": "Disabled"
+    },
+    "clientInfo": {
+      "title": "Client Information",
+      "connectionInfo": "Connection Information",
+      "clientSettings": "Client Settings"
+    },
+    "securityNote": "Note: The configuration file contains a private key. Handle it securely and do not share it with others.",
+    "instructions": {
+      "title": "WireGuard Client Connection Guide",
+      "mobile": {
+        "title": "Android / iOS",
+        "step1": "Download and install the WireGuard app from your app store",
+        "step2": "Open the WireGuard app and tap \"Add Tunnel\"",
+        "step3": "Choose \"Scan from QR Code\" or \"Import from file\"",
+        "step4": "For QR code: Click the \"Show QR Code\" button above, then scan with the app",
+        "step5": "For file import: Click the \"Download Config File\" button above, send the file to your device, then import it in the app",
+        "step6": "After adding, tap the switch on the tunnel to connect"
+      },
+      "desktop": {
+        "title": "Windows / macOS",
+        "step1": "Download and install the WireGuard app from the [WireGuard website](https://www.wireguard.com/install/)",
+        "step2": "Click the \"Download Config File\" button above",
+        "step3": "Open the WireGuard app, click \"Import tunnel\", and select the downloaded config file",
+        "step4": "Click the \"Activate\" button to connect"
+      },
+      "linux": {
+        "title": "Linux",
+        "step1": "Install WireGuard: `sudo apt install wireguard` (Ubuntu/Debian) or `sudo dnf install wireguard-tools` (Fedora)",
+        "step2": "Click the \"Download Config File\" button above",
+        "step3": "Save the config file to the `/etc/wireguard/` directory, e.g.: `sudo cp ~/Downloads/{filename}.conf /etc/wireguard/wg0.conf`",
+        "step4": "Start connection: `sudo wg-quick up wg0`",
+        "step5": "Stop connection: `sudo wg-quick down wg0`"
+      }
+    },
+    "qrCode": {
+      "title": "Scan QR Code to Connect",
+      "altText": "WireGuard configuration QR code",
+      "scanInstructions": "Use the WireGuard mobile app to scan this QR code to import the configuration",
+      "downloadInstead": "Download config file instead",
+      "close": "Close"
+    },
+    "errors": {
+      "invalidConfigFormat": "Invalid configuration data format returned",
+      "fetchConfigError": "Error fetching configuration info:",
+      "fetchConfigFailed": "Failed to get configuration info. Please check network connection or server status",
+      "generateQRError": "Error generating QR code:",
+      "generateQRFailed": "Failed to generate QR code. Please try downloading the configuration file instead",
+      "unableToLoadConfig": "Unable to load peer configuration data. Please go back and try again."
+    }
+  }
+} 
