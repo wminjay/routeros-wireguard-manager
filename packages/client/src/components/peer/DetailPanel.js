@@ -129,11 +129,13 @@ function DetailPanel({ peerData, onStatusRefresh }) {
                   <Typography variant="subtitle2" color="text.secondary">{t('peerDetail.basicInfo.status')}</Typography>
                 </Grid>
                 <Grid item xs={8}>
-                  <Chip 
-                    label={peerData.enabled ? t('peerDetail.basicInfo.enabled') : t('peerDetail.basicInfo.disabled')} 
-                    color={peerData.enabled ? 'success' : 'default'}
-                    size="small"
-                  />
+                  <Box>
+                    <Chip 
+                      label={peerData.enabled ? t('peerDetail.basicInfo.enabled') : t('peerDetail.basicInfo.disabled')} 
+                      color={peerData.enabled ? 'success' : 'default'}
+                      size="small"
+                    />
+                  </Box>
                 </Grid>
                 
                 {peerData.comment && (

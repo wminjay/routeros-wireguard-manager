@@ -199,6 +199,11 @@ function Settings() {
       // 保存成功
       setSaveSuccess(true);
       
+      // 延迟2秒后刷新页面，让用户看到成功消息
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+      
       // 更新连接状态
       const statusResponse = await fetch('/api/settings/connection-status');
       if (statusResponse.ok) {
@@ -280,7 +285,7 @@ function Settings() {
                 )}
                 <Typography variant="body1">
                   {connectionStatus.connected 
-                    ? t('settings.status.connected', { model: connectionStatus.model, version: connectionStatus.version })
+                    ? t('settings.status.connected', { model: connectionStatus.model })
                     : t('settings.status.disconnected')}
                 </Typography>
               </Box>

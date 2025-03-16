@@ -18,11 +18,12 @@
   },
   "status": {
     "connected": "已连接",
-    "disconnected": "未连接"
+    "disconnected": "未连接到RouterOS，请检查连接设置",
+    "unknown": "未知状态，请测试连接"
   },
   "errors": {
-    "routerStatus": "获取RouterOS状态出错",
-    "connectionError": "连接错误",
+    "routerStatus": "检查RouterOS状态出错",
+    "connectionError": "无法连接到RouterOS设备",
     "fetchInterfacesFailed": "获取接口列表失败",
     "fetchInterfaces": "获取接口列表错误:",
     "fetchInterfacesCheckConnection": "获取接口列表失败，请检查网络连接或服务器状态",
@@ -32,7 +33,11 @@
     "generateKeysErrorMessage": "生成密钥对时出错: ",
     "createPeerFailed": "创建对等点失败",
     "createPeerError": "创建对等点错误:",
-    "createPeerTryAgain": "创建对等点失败，请稍后重试"
+    "createPeerTryAgain": "创建对等点失败，请稍后重试",
+    "fetchError": "获取数据失败",
+    "saveError": "保存数据失败",
+    "deleteError": "删除数据失败",
+    "setupStatusCheck": "检查设置状态出错"
   },
   "common": {
     "back": "返回",
@@ -44,7 +49,8 @@
     "confirm": "确认",
     "yes": "是",
     "no": "否",
-    "copied": "已复制"
+    "copied": "已复制",
+    "next": "下一步"
   },
   "interfaces": {
     "title": "WireGuard 接口",
@@ -77,11 +83,8 @@
     },
     "errors": {
       "fetchFailed": "获取接口列表失败",
-      "fetchError": "获取接口列表错误:",
       "fetchErrorMessage": "获取接口列表失败，请检查网络连接或服务器状态",
       "deleteFailed": "删除接口失败",
-      "deleteError": "删除接口错误:",
-      "deleteTryAgain": "删除接口失败，请稍后重试",
       "syncFailed": "同步接口失败",
       "syncError": "同步接口错误:",
       "syncTryAgain": "同步接口失败，请稍后重试"
@@ -145,7 +148,6 @@
     },
     "errors": {
       "fetchFailed": "获取接口详情失败",
-      "fetchError": "获取接口详情错误:",
       "fetchErrorMessage": "获取接口详情失败，请检查网络连接或服务器状态",
       "updateFailed": "更新接口失败",
       "updateError": "更新接口错误:",
@@ -223,12 +225,10 @@
     },
     "messages": {
       "fetchFailed": "获取对等点数据失败",
-      "fetchError": "加载对等点数据出错:",
       "fetchErrorMessage": "加载对等点数据出错: "
     },
     "errors": {
       "deleteFailed": "删除对等点失败",
-      "deleteError": "删除对等点错误:",
       "deleteTryAgain": "删除对等点失败，请稍后重试"
     },
     "deleteModal": {
@@ -291,14 +291,9 @@
     },
     "errors": {
       "fetchFailed": "获取对等点列表失败",
-      "fetchError": "获取对等点列表错误:",
       "fetchErrorMessage": "获取对等点列表失败，请检查网络连接或服务器状态",
       "deleteFailed": "删除对等点失败",
-      "deleteError": "删除对等点错误:",
       "deleteTryAgain": "删除对等点失败，请稍后重试",
-      "syncFailed": "同步对等点失败",
-      "syncError": "同步对等点错误:",
-      "syncTryAgain": "同步对等点失败，请稍后重试",
       "statusUpdateFailed": "更新对等点状态失败",
       "statusUpdateError": "更新对等点状态错误:",
       "statusUpdateTryAgain": "更新对等点状态失败，请稍后重试"
@@ -420,7 +415,31 @@
     "subtitle": "配置RouterOS连接和应用程序设置",
     "update": "更新设置",
     "updating": "更新中...",
-    "updateSuccess": "设置已更新",
+    "saveSuccess": "设置已更新",
+    "saveButton": "保存设置",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码",
+    "routerOS": {
+      "address": "RouterOS 地址",
+      "port": "RouterOS 端口",
+      "username": "用户名",
+      "password": "密码"
+    },
+    "app": {
+      "defaultDNS": "默认DNS服务器",
+      "serverAddress": "服务器地址",
+      "serverPort": "服务器端口"
+    },
+    "test": {
+      "success": "连接成功！设备型号: {{model}}, 版本: {{version}}",
+      "failed": "连接失败",
+      "unknown": "未知"
+    },
+    "status": {
+      "connected": "已连接到 {{model}}",
+      "disconnected": "未连接到RouterOS，请检查连接设置",
+      "unknown": "未知状态，请测试连接"
+    },
     "form": {
       "routerOS": {
         "title": "RouterOS连接设置",
@@ -459,8 +478,11 @@
       "hostFormat": "主机地址格式不正确",
       "invalidPort": "端口号必须是1-65535之间的数字",
       "updateFailed": "更新设置失败",
-      "updateError": "更新设置错误:",
-      "testFailed": "连接测试失败"
+      "saveFailed": "保存设置失败",
+      "saveError": "保存设置错误:",
+      "testFailed": "连接测试失败",
+      "testError": "测试连接错误",
+      "testErrorMessage": "无法连接到RouterOS，请检查连接信息"
     },
     "support": {
       "title": "支持信息",
@@ -476,10 +498,75 @@
     "subtitle": "几分钟内创建WireGuard接口和客户端",
     "headerTitle": "WireGuard快速设置向导",
     "headerDescription": "快速创建接口和客户端配置，只需几个简单步骤",
+    "pageTitle": "WireGuard快速设置",
+    "pageSubtitle": "通过几个简单步骤快速创建WireGuard配置",
+    "success": "WireGuard配置创建成功！",
+    "unknownStep": "未知步骤",
+    "errors": {
+      "createFailed": "创建失败",
+      "setupFailed": "快速设置失败"
+    },
     "steps": {
+      "basicInfo": "基本信息",
+      "interfaceConfig": "接口配置",
+      "peerConfig": "对等点配置",
+      "complete": "完成",
       "interface": "接口设置",
-      "peer": "对等点设置",
-      "complete": "完成"
+      "peer": "对等点设置"
+    },
+    "navigation": {
+      "back": "返回",
+      "next": "下一步",
+      "create": "创建"
+    },
+    "basicInfo": {
+      "title": "基本设置",
+      "subtitle": "请提供RouterOS路由器的基本信息",
+      "routerIpLabel": "路由器IP地址",
+      "routerIpHelp": "RouterOS路由器的公网IP地址或域名",
+      "commentLabel": "备注",
+      "commentHelp": "可选，为此配置添加描述"
+    },
+    "interfaceConfig": {
+      "title": "WireGuard接口配置",
+      "subtitle": "在RouterOS上配置WireGuard接口",
+      "createNew": "创建新接口",
+      "useExisting": "使用现有接口",
+      "selectInterface": "选择接口",
+      "loading": "加载中...",
+      "noInterfaces": "没有可用的接口",
+      "interfaceNameLabel": "接口名称",
+      "interfaceNameHelp": "RouterOS中的接口名称，例如wg0",
+      "displayNameLabel": "显示名称",
+      "displayNameHelp": "在系统中显示的接口名称",
+      "listenPortLabel": "监听端口",
+      "listenPortHelp": "WireGuard监听的UDP端口",
+      "addressLabel": "接口地址",
+      "addressHelp": "WireGuard接口IP地址/子网掩码，例如10.0.0.1/24",
+      "mtuLabel": "MTU",
+      "mtuHelp": "可选，默认为1420"
+    },
+    "peerConfig": {
+      "title": "WireGuard对等点配置",
+      "subtitle": "配置连接到RouterOS的客户端设备",
+      "peerNameLabel": "对等点名称",
+      "peerNameHelp": "客户端设备的名称",
+      "allowedIPsLabel": "允许的IP地址",
+      "allowedIPsHelp": "分配给客户端的IP地址/子网掩码，例如10.0.0.2/32",
+      "refreshIPTooltip": "刷新建议的IP",
+      "keepaliveLabel": "持续保活间隔",
+      "keepaliveHelp": "可选，默认为25秒"
+    },
+    "peer": {
+      "title": "对等点设置",
+      "description": "配置连接到此接口的客户端",
+      "peerNameLabel": "对等点名称",
+      "peerNameHelp": "为此客户端提供一个易于识别的名称",
+      "allowedIPsLabel": "允许的IP",
+      "allowedIPsHelp": "此客户端允许使用的IP地址（如10.0.0.2/32）",
+      "persistentKeepaliveLabel": "保活间隔",
+      "persistentKeepaliveHelp": "可选，默认为25秒",
+      "defaultName": "客户端1"
     },
     "interface": {
       "title": "接口设置",
@@ -498,17 +585,6 @@
       "addressHelp": "可选，接口的IP地址（如10.0.0.1/24）",
       "mtuLabel": "MTU",
       "mtuHelp": "可选，最大传输单元（默认1420）"
-    },
-    "peer": {
-      "title": "对等点设置",
-      "description": "配置连接到此接口的客户端",
-      "peerNameLabel": "对等点名称",
-      "peerNameHelp": "为此客户端提供一个易于识别的名称",
-      "allowedIPsLabel": "允许的IP",
-      "allowedIPsHelp": "此客户端允许使用的IP地址（如10.0.0.2/32）",
-      "persistentKeepaliveLabel": "保活间隔",
-      "persistentKeepaliveHelp": "可选，默认为25秒",
-      "defaultName": "客户端1"
     },
     "complete": {
       "success": "WireGuard配置创建成功！",
@@ -718,6 +794,58 @@
       "fetchConfigFailed": "获取配置信息失败，请检查网络连接或服务器状态",
       "generateQRError": "生成二维码错误:",
       "generateQRFailed": "生成二维码失败，请尝试下载配置文件"
+    }
+  },
+  "setupWizard": {
+    "title": "首次启动设置向导",
+    "steps": {
+      "welcome": "欢迎使用",
+      "routerConnection": "RouterOS连接",
+      "serverConfig": "服务器配置",
+      "importConfig": "配置导入",
+      "complete": "完成设置"
+    },
+    "finish": "完成设置",
+    "welcome": {
+      "title": "欢迎使用RouterOS WireGuard配置管理器",
+      "description": "这个工具可以帮助你简单高效地管理RouterOS设备上的WireGuard VPN配置。",
+      "guidance": "在接下来的几个步骤中，我们将帮助你完成初始化设置。",
+      "note": "这个设置只需要进行一次，之后你可以随时在设置页面中修改这些选项。"
+    },
+    "routerConnection": {
+      "title": "配置RouterOS连接",
+      "description": "请提供你的RouterOS设备的连接信息。这些信息将用于连接到你的RouterOS设备并管理WireGuard配置。",
+      "addressHelper": "输入RouterOS设备的IP地址或主机名",
+      "portHelper": "RouterOS API端口，默认为8728（非SSL）或8729（SSL）",
+      "usernameHelper": "具有访问权限的RouterOS用户名",
+      "passwordHelper": "RouterOS用户密码",
+      "testButton": "测试连接"
+    },
+    "serverConfig": {
+      "title": "服务器配置",
+      "description": "配置应用服务器相关设置，这些设置将用于生成客户端配置文件。",
+      "dnsHelper": "WireGuard客户端配置中使用的DNS服务器，多个DNS用逗号分隔",
+      "serverAddressHelper": "客户端连接的公网地址或域名",
+      "serverPortHelper": "公网端口（用于客户端连接的端口）"
+    },
+    "importConfig": {
+      "title": "导入现有配置",
+      "description": "你可以选择导入RouterOS上现有的WireGuard接口和对等点配置。",
+      "importCheckbox": "导入现有WireGuard配置",
+      "importHelper": "这将从你的RouterOS设备上获取所有WireGuard接口和对等点，并将它们导入到管理器中"
+    },
+    "complete": {
+      "title": "设置完成！",
+      "description": "你已经完成了RouterOS WireGuard配置管理器的初始设置。你现在可以开始使用此工具来管理你的WireGuard VPN。",
+      "viewInterfaces": "查看接口列表",
+      "quickSetup": "快速创建新的VPN"
+    },
+    "errors": {
+      "importFailed": "导入现有配置失败",
+      "importError": "导入配置时出错"
+    },
+    "success": {
+      "importComplete": "成功导入现有配置"
     }
   }
 } 

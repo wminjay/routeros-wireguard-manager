@@ -21,15 +21,19 @@
     "disconnected": "Disconnected"
   },
   "errors": {
-    "routerStatus": "Error fetching RouterOS status",
-    "connectionError": "Connection error",
+    "routerStatus": "Error checking RouterOS status",
+    "connectionError": "Cannot connect to RouterOS device",
     "fetchInterfacesFailed": "Failed to fetch interfaces list",
     "fetchInterfaces": "Error fetching interfaces:",
     "fetchInterfacesCheckConnection": "Failed to fetch interfaces list, please check network connection or server status",
     "suggestedIPError": "Error fetching suggested IP:",
     "generateKeysFailed": "Failed to generate key pair",
     "generateKeysError": "Error while generating key pair:",
-    "generateKeysErrorMessage": "Error while generating key pair: "
+    "generateKeysErrorMessage": "Error while generating key pair: ",
+    "fetchError": "Failed to fetch data",
+    "saveError": "Failed to save data",
+    "deleteError": "Failed to delete data",
+    "setupStatusCheck": "Error checking setup status"
   },
   "common": {
     "back": "Back",
@@ -41,7 +45,8 @@
     "confirm": "Confirm",
     "yes": "Yes",
     "no": "No",
-    "copied": "Copied"
+    "copied": "Copied",
+    "next": "Next"
   },
   "interfaces": {
     "title": "WireGuard Interfaces",
@@ -74,11 +79,8 @@
     },
     "errors": {
       "fetchFailed": "Failed to fetch interfaces list",
-      "fetchError": "Error fetching interfaces list:",
       "fetchErrorMessage": "Failed to fetch interfaces list, please check network connection or server status",
       "deleteFailed": "Failed to delete interface",
-      "deleteError": "Error deleting interface:",
-      "deleteTryAgain": "Failed to delete interface, please try again later",
       "syncFailed": "Failed to sync interfaces",
       "syncError": "Error syncing interfaces:",
       "syncTryAgain": "Failed to sync interfaces, please try again later"
@@ -142,7 +144,6 @@
     },
     "errors": {
       "fetchFailed": "Failed to fetch interface details",
-      "fetchError": "Error fetching interface details:",
       "fetchErrorMessage": "Failed to fetch interface details, please check network connection or server status",
       "updateFailed": "Failed to update interface",
       "updateError": "Error updating interface:",
@@ -248,7 +249,6 @@
     },
     "messages": {
       "fetchFailed": "Failed to fetch peer data",
-      "fetchError": "Error loading peer data:",
       "fetchErrorMessage": "Error loading peer data: "
     },
     "errors": {
@@ -316,7 +316,6 @@
     },
     "errors": {
       "fetchFailed": "Failed to fetch peers list",
-      "fetchError": "Error fetching peers list:",
       "fetchErrorMessage": "Failed to fetch peers list, please check network connection or server status",
       "deleteFailed": "Failed to delete peer",
       "deleteError": "Error deleting peer:",
@@ -442,23 +441,31 @@
   },
   "settings": {
     "title": "System Settings",
-    "subtitle": "Configure RouterOS connection parameters and global settings",
-    "saveSuccess": "Settings saved successfully",
+    "subtitle": "Configure RouterOS connection and application settings",
+    "update": "Update Settings",
+    "updating": "Updating...",
+    "saveSuccess": "Settings updated successfully",
     "saveButton": "Save Settings",
-    "saving": "Saving...",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
     "routerOS": {
       "title": "RouterOS Connection Settings",
       "connectionStatus": "RouterOS Connection Status",
       "device": "RouterOS Device",
       "address": "RouterOS Address",
       "addressHelp": "IP address or hostname, e.g.: 192.168.1.1",
-      "port": "API Port",
-      "portHelp": "RouterOS API port, default is 8728 (unencrypted)",
+      "port": "RouterOS Port",
+      "portHelp": "RouterOS API service port, default is 8728",
       "username": "Username",
-      "usernameHelp": "RouterOS login username",
+      "usernameHelp": "RouterOS API username",
       "password": "Password",
-      "passwordHelp": "RouterOS login password",
+      "passwordHelp": "RouterOS API password",
       "togglePassword": "Toggle password visibility"
+    },
+    "app": {
+      "defaultDNS": "Default DNS Servers",
+      "serverAddress": "Server Address",
+      "serverPort": "Server Port"
     },
     "status": {
       "connected": "Connected to {{model}} {{version}}",
@@ -467,8 +474,8 @@
     },
     "test": {
       "button": "Test Connection",
-      "success": "Connection test successful, RouterOS version: {{version}}, model: {{model}}",
-      "failed": "Connection test failed, please check connection parameters",
+      "success": "Connection successful! Model: {{model}}, Version: {{version}}",
+      "failed": "Connection failed",
       "unknown": "Unknown"
     },
     "wireguard": {
@@ -498,15 +505,49 @@
       "contribute": "Contribute",
       "repository": "GitHub Repository"
     },
+    "form": {
+      "routerOS": {
+        "title": "RouterOS Connection Settings",
+        "host": "Host Address",
+        "hostHelp": "IP address or domain name of your RouterOS device",
+        "port": "API Port",
+        "portHelp": "RouterOS API service port, default is 8728",
+        "ssl": "Enable SSL/TLS",
+        "sslHelp": "Use secure connection",
+        "username": "Username",
+        "usernameHelp": "RouterOS API username",
+        "password": "Password",
+        "passwordHelp": "RouterOS API password",
+        "test": "Test Connection",
+        "testing": "Testing...",
+        "testSuccess": "Connection Successful!",
+        "testError": "Connection Failed:"
+      },
+      "server": {
+        "title": "Server Settings",
+        "address": "Server Address",
+        "addressHelp": "Public IP or domain name for client connections",
+        "port": "Server Port",
+        "portHelp": "Externally accessible port"
+      },
+      "general": {
+        "title": "General Settings",
+        "defaultDNS": "Default DNS",
+        "defaultDNSHelp": "DNS servers used in client configuration, separate multiple addresses with commas",
+        "language": "Interface Language",
+        "languageHelp": "Select application interface language"
+      }
+    },
     "errors": {
-      "fetchFailed": "Failed to fetch settings",
-      "fetchError": "Error fetching settings:",
-      "fetchErrorMessage": "Failed to fetch settings, please check network connection or server status",
+      "required": "This field is required",
+      "hostFormat": "Invalid host address format",
+      "invalidPort": "Port must be a number between 1-65535",
+      "updateFailed": "Failed to update settings",
       "saveFailed": "Failed to save settings",
       "saveError": "Error saving settings:",
-      "saveTryAgain": "Failed to save settings, please try again later",
-      "testError": "Error testing connection:",
-      "testErrorMessage": "Connection test failed, please check network connection or server status"
+      "testFailed": "Connection test failed",
+      "testError": "Error testing connection",
+      "testErrorMessage": "Unable to connect to RouterOS, please check connection information"
     }
   },
   "quickSetup": {
@@ -768,6 +809,58 @@
       "generateQRError": "Error generating QR code:",
       "generateQRFailed": "Failed to generate QR code. Please try downloading the configuration file instead",
       "unableToLoadConfig": "Unable to load peer configuration data. Please go back and try again."
+    }
+  },
+  "setupWizard": {
+    "title": "First-Time Setup Wizard",
+    "steps": {
+      "welcome": "Welcome",
+      "routerConnection": "RouterOS Connection",
+      "serverConfig": "Server Configuration",
+      "importConfig": "Import Configuration",
+      "complete": "Complete"
+    },
+    "finish": "Finish Setup",
+    "welcome": {
+      "title": "Welcome to RouterOS WireGuard Configuration Manager",
+      "description": "This tool helps you manage WireGuard VPN configurations on your RouterOS device easily and efficiently.",
+      "guidance": "In the next few steps, we'll help you complete the initial setup.",
+      "note": "This setup only needs to be done once, and you can modify these options at any time in the settings page."
+    },
+    "routerConnection": {
+      "title": "Configure RouterOS Connection",
+      "description": "Please provide your RouterOS device connection information. This will be used to connect to your RouterOS device and manage WireGuard configurations.",
+      "addressHelper": "Enter the IP address or hostname of your RouterOS device",
+      "portHelper": "RouterOS API port, typically 8728 (non-SSL) or 8729 (SSL)",
+      "usernameHelper": "RouterOS username with access permissions",
+      "passwordHelper": "RouterOS user password",
+      "testButton": "Test Connection"
+    },
+    "serverConfig": {
+      "title": "Server Configuration",
+      "description": "Configure application server settings which will be used to generate client configuration files.",
+      "dnsHelper": "DNS servers used in WireGuard client configurations, separate multiple DNS with commas",
+      "serverAddressHelper": "Public address or domain name for client connections",
+      "serverPortHelper": "Public port (used for client connections)"
+    },
+    "importConfig": {
+      "title": "Import Existing Configuration",
+      "description": "You can choose to import existing WireGuard interfaces and peers from your RouterOS device.",
+      "importCheckbox": "Import existing WireGuard configurations",
+      "importHelper": "This will fetch all WireGuard interfaces and peers from your RouterOS device and import them into the manager"
+    },
+    "complete": {
+      "title": "Setup Complete!",
+      "description": "You have completed the initial setup of the RouterOS WireGuard Configuration Manager. You can now start using this tool to manage your WireGuard VPN.",
+      "viewInterfaces": "View Interfaces",
+      "quickSetup": "Quick Setup New VPN"
+    },
+    "errors": {
+      "importFailed": "Failed to import existing configurations",
+      "importError": "Error importing configurations"
+    },
+    "success": {
+      "importComplete": "Successfully imported existing configurations"
     }
   }
 } 

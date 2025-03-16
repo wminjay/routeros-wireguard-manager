@@ -327,19 +327,21 @@ function Home() {
             {t('dashboard.title')}
           </Typography>
           <Tooltip title={t('dashboard.refresh')}>
-            <IconButton 
-              size="small" 
-              onClick={() => fetchDashboardData(false)}
-              disabled={loading || isRefreshing}
-            >
-              <RefreshIcon sx={{ 
-                animation: (loading || isRefreshing) ? 'spin 2s linear infinite' : 'none',
-                '@keyframes spin': {
-                  '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' }
-                }
-              }} />
-            </IconButton>
+            <span>
+              <IconButton 
+                size="small" 
+                onClick={() => fetchDashboardData(false)}
+                disabled={loading || isRefreshing}
+              >
+                <RefreshIcon sx={{ 
+                  animation: (loading || isRefreshing) ? 'spin 2s linear infinite' : 'none',
+                  '@keyframes spin': {
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(360deg)' }
+                  }
+                }} />
+              </IconButton>
+            </span>
           </Tooltip>
         </Box>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -435,7 +437,7 @@ function Home() {
             <CardContent sx={{ flexGrow: 1, pt: 3 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <RouterIcon sx={{ fontSize: 24, mr: 1, color: 'primary.main' }} />
-                <Typography variant="h6" fontSize="1rem">
+                <Typography variant="h6" component="div" fontSize="1rem">
                   {t('dashboard.cards.router.title')}
                 </Typography>
               </Box>
@@ -449,13 +451,15 @@ function Home() {
                   sx={{ height: 32, px: 1 }}
                 />
               </Box>
-              <Typography variant="body2" color="text.secondary" fontSize="0.875rem" sx={{ textAlign: 'center' }}>
-                {stats && stats.routerStatus ? (
-                  stats.routerStatus.connected 
-                    ? `${stats.routerStatus.model || 'RouterOS'} ${stats.routerStatus.version || ''}`
-                    : t('dashboard.cards.router.checkSettings')
-                ) : t('dashboard.cards.router.checking')}
-              </Typography>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography component="div" variant="body2" color="text.secondary" fontSize="0.875rem">
+                  {stats && stats.routerStatus ? (
+                    stats.routerStatus.connected 
+                      ? `${stats.routerStatus.model || 'RouterOS'} ${stats.routerStatus.version || ''}`
+                      : t('dashboard.cards.router.checkSettings')
+                  ) : t('dashboard.cards.router.checking')}
+                </Typography>
+              </Box>
             </CardContent>
             <Divider />
             <CardActions sx={{ justifyContent: 'flex-end', py: 1 }}>
@@ -495,6 +499,8 @@ function Home() {
                       <AddIcon />
                     </ListItemIcon>
                     <ListItemText 
+                      primaryTypographyProps={{ component: 'div' }}
+                      secondaryTypographyProps={{ component: 'div' }}
                       primary={<Typography variant="body1" fontSize="0.95rem">{t('dashboard.quickActions.newInterface.title')}</Typography>} 
                       secondary={<Typography variant="body2" fontSize="0.8rem" color="text.secondary">{t('dashboard.quickActions.newInterface.description')}</Typography>} 
                     />
@@ -506,6 +512,8 @@ function Home() {
                       <AddIcon />
                     </ListItemIcon>
                     <ListItemText 
+                      primaryTypographyProps={{ component: 'div' }}
+                      secondaryTypographyProps={{ component: 'div' }}
                       primary={<Typography variant="body1" fontSize="0.95rem">{t('dashboard.quickActions.newPeer.title')}</Typography>} 
                       secondary={<Typography variant="body2" fontSize="0.8rem" color="text.secondary">{t('dashboard.quickActions.newPeer.description')}</Typography>} 
                     />
@@ -517,6 +525,8 @@ function Home() {
                       <SettingsIcon />
                     </ListItemIcon>
                     <ListItemText 
+                      primaryTypographyProps={{ component: 'div' }}
+                      secondaryTypographyProps={{ component: 'div' }}
                       primary={<Typography variant="body1" fontSize="0.95rem">{t('dashboard.quickActions.settings.title')}</Typography>} 
                       secondary={<Typography variant="body2" fontSize="0.8rem" color="text.secondary">{t('dashboard.quickActions.settings.description')}</Typography>} 
                     />
@@ -573,28 +583,34 @@ function Home() {
                             />
                           </ListItemIcon>
                           <ListItemText 
+                            primaryTypographyProps={{ component: 'div' }}
+                            secondaryTypographyProps={{ component: 'div' }}
                             primary={
                               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                <Typography component="span" variant="body2" fontSize="0.95rem" sx={{ fontWeight: peer.lastHandshake && isRecentHandshake(peer.lastHandshake) ? 'medium' : 'normal' }}>
+                                <Typography component="div" variant="body2" fontSize="0.95rem" sx={{ fontWeight: peer.lastHandshake && isRecentHandshake(peer.lastHandshake) ? 'medium' : 'normal' }}>
                                   {peer.name || t('dashboard.recentPeers.unnamed')}
                                 </Typography>
                                 {peer.lastHandshake && (
                                   <Tooltip title={`${t('dashboard.recentPeers.status.lastHandshake')}: ${new Date(peer.lastHandshake).toLocaleString()}`}>
-                                    <Chip 
-                                      label={isRecentHandshake(peer.lastHandshake) ? t('dashboard.recentPeers.status.online') : formatTimeDiff(peer.lastHandshake)}
-                                      color={isRecentHandshake(peer.lastHandshake) ? "success" : "default"}
-                                      size="small"
-                                      variant="outlined"
-                                      sx={{ ml: 1, height: 22, '& .MuiChip-label': { px: 0.8, fontSize: '0.7rem' } }}
-                                    />
+                                    <span>
+                                      <Chip 
+                                        label={isRecentHandshake(peer.lastHandshake) ? t('dashboard.recentPeers.status.online') : formatTimeDiff(peer.lastHandshake)}
+                                        color={isRecentHandshake(peer.lastHandshake) ? "success" : "default"}
+                                        size="small"
+                                        variant="outlined"
+                                        sx={{ ml: 1, height: 22, '& .MuiChip-label': { px: 0.8, fontSize: '0.7rem' } }}
+                                      />
+                                    </span>
                                   </Tooltip>
                                 )}
                               </Box>
                             }
                             secondary={
                               <Box sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
-                                <Typography variant="body2" component="span" color="text.secondary" fontSize="0.8rem" sx={{ mr: 1 }}>
-                                  {peer.interfaceName || t('dashboard.recentPeers.unknown')} •{' '}
+                                <Box component="span" sx={{ display: 'flex', alignItems: 'center' }}>
+                                  <Typography component="div" variant="body2" color="text.secondary" fontSize="0.8rem">
+                                    {peer.interfaceName || t('dashboard.recentPeers.unknown')} •{' '}
+                                  </Typography>
                                   <Tooltip title={peer.allowedIPs || t('dashboard.recentPeers.notSetIP')}>
                                     <span style={{ 
                                       display: 'inline-block',
@@ -607,14 +623,16 @@ function Home() {
                                       {peer.allowedIPs || t('dashboard.recentPeers.notSetIP')}
                                     </span>
                                   </Tooltip>
-                                </Typography>
-                                <Chip 
-                                  size="small" 
-                                  label={peer.enabled ? t('dashboard.recentPeers.status.enabled') : t('dashboard.recentPeers.status.disabled')} 
-                                  color={peer.enabled ? "success" : "default"}
-                                  variant="outlined"
-                                  sx={{ ml: 1, height: 20, '& .MuiChip-label': { px: 0.6, fontSize: '0.7rem' } }}
-                                />
+                                </Box>
+                                <Box component="span" sx={{ display: 'inline-flex' }}>
+                                  <Chip 
+                                    size="small" 
+                                    label={peer.enabled ? t('dashboard.recentPeers.status.enabled') : t('dashboard.recentPeers.status.disabled')} 
+                                    color={peer.enabled ? "success" : "default"}
+                                    variant="outlined"
+                                    sx={{ ml: 1, height: 20, '& .MuiChip-label': { px: 0.6, fontSize: '0.7rem' } }}
+                                  />
+                                </Box>
                               </Box>
                             } 
                           />

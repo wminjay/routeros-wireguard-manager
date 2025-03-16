@@ -10,6 +10,7 @@ import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Home from './pages/Home';
 import TitleManager from './components/TitleManager';
+import SetupWizard from './components/setup/SetupWizard';
 
 // 延迟加载其他页面组件
 const Interfaces = lazy(() => import('./pages/Interfaces'));
@@ -33,6 +34,8 @@ const routerOptions = {
 function App() {
   const { i18n, t } = useTranslation();
   const [routerOSStatus, setRouterOSStatus] = useState(null);
+  const [showSetupWizard, setShowSetupWizard] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
   const currentLanguage = i18n.language || 'en'; 
   const currentLocale = currentLanguage.startsWith('zh') ? zhCN : enUS;
 
@@ -107,6 +110,31 @@ function App() {
     }
   }, currentLocale), [currentLocale]);
 
+  // 检查是否首次启动
+  useEffect(() => {
+    const checkSetupStatus = async () => {
+      try {
+        const response = await fetch('/api/settings/setup-status');
+        const data = await response.json();
+        
+        if (response.ok && data) {
+          setShowSetupWizard(!data.setupCompleted);
+        } else {
+          // 如果无法获取设置状态，默认显示设置向导
+          setShowSetupWizard(true);
+        }
+      } catch (error) {
+        console.error(t('errors.setupStatusCheck'), error);
+        // 如果请求失败，默认显示设置向导
+        setShowSetupWizard(true);
+      } finally {
+        setIsInitializing(false);
+      }
+    };
+    
+    checkSetupStatus();
+  }, [t]);
+
   useEffect(() => {
     // 检查RouterOS连接状态
     const checkStatus = async () => {
@@ -129,11 +157,40 @@ function App() {
     return () => clearInterval(intervalId);
   }, [t]);
 
+  const handleSetupComplete = () => {
+    setShowSetupWizard(false);
+  };
+
+  if (isInitializing) {
+    return (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            height: '100vh' 
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      </ThemeProvider>
+    );
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <TitleManager />
+      
       <Router {...routerOptions}>
+        {/* 设置向导对话框 - 现在放在Router内部 */}
+        <SetupWizard 
+          open={showSetupWizard} 
+          onComplete={handleSetupComplete} 
+        />
+        
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           <Header routerOSStatus={routerOSStatus} />
           <Container component="main" sx={{ 

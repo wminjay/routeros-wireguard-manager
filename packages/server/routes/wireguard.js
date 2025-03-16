@@ -236,4 +236,28 @@ router.post('/interfaces/:id/update-peers-status',
  */
 router.get('/generate-keys', wireguardController.generateKeys);
 
+// 导入所有WireGuard配置
+router.post('/import-all', async (req, res) => {
+  try {
+    // 调用控制器方法导入所有接口和对等点
+    const { interfaces, peers } = await wireguardController.importAllConfigurations();
+    
+    return res.json({
+      success: true,
+      message: '成功导入所有WireGuard配置',
+      data: {
+        interfacesCount: interfaces.length,
+        peersCount: peers.length
+      }
+    });
+  } catch (error) {
+    console.error('导入WireGuard配置失败:', error);
+    return res.status(500).json({
+      success: false,
+      message: '导入WireGuard配置失败',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router; 

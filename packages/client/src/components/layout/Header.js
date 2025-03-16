@@ -77,13 +77,15 @@ function Header({ routerOSStatus }) {
         <Typography variant="h6" sx={{ mb: 1 }}>
           {t('app.title', 'WireGuard配置器')}
         </Typography>
-        <Chip 
-          label={routerOSStatus?.status === 'connected' 
-            ? t('status.connected', '已连接') 
-            : t('status.disconnected', '未连接')} 
-          color={routerOSStatus?.status === 'connected' ? 'success' : 'error'}
-          size="small"
-        />
+        <Box>
+          <Chip 
+            label={routerOSStatus?.status === 'connected' 
+              ? t('status.connected', '已连接') 
+              : t('status.disconnected', '未连接')} 
+            color={routerOSStatus?.status === 'connected' ? 'success' : 'error'}
+            size="small"
+          />
+        </Box>
       </Box>
       <List>
         {menuItems.map((item) => (
@@ -132,14 +134,16 @@ function Header({ routerOSStatus }) {
           </Typography>
 
           {routerOSStatus && (
-            <Chip 
-              label={routerOSStatus.status === 'connected' 
-                ? t('status.connected', '已连接') 
-                : t('status.disconnected', '未连接')} 
-              color={routerOSStatus.status === 'connected' ? 'success' : 'error'}
-              size="small"
-              sx={{ mr: 2 }}
-            />
+            <Box component="div">
+              <Chip 
+                label={routerOSStatus.status === 'connected' 
+                  ? t('status.connected', '已连接') 
+                  : t('status.disconnected', '未连接')} 
+                color={routerOSStatus.status === 'connected' ? 'success' : 'error'}
+                size="small"
+                sx={{ mr: 2 }}
+              />
+            </Box>
           )}
 
           <LanguageSwitcher />

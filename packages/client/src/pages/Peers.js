@@ -450,13 +450,15 @@ function Peers() {
                         </Typography>
                         {peer.isImported && (
                           <Tooltip title={t('peers.importedPeerTooltip')}>
-                            <Chip
-                              label={t('peers.imported')}
-                              size="small"
-                              variant="outlined"
-                              color="default"
-                              sx={{ ml: 1, height: 20, fontSize: '0.65rem', opacity: 0.7 }}
-                            />
+                            <span>
+                              <Chip
+                                label={t('peers.imported')}
+                                size="small"
+                                variant="outlined"
+                                color="default"
+                                sx={{ ml: 1, height: 20, fontSize: '0.65rem', opacity: 0.7 }}
+                              />
+                            </span>
                           </Tooltip>
                         )}
                         {peer.comment && (
@@ -491,36 +493,44 @@ function Peers() {
                     <TableCell align="right">
                       <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 0.5 }}>
                         <Tooltip title={t('peers.actions.viewDetails')}>
-                          <IconButton 
-                            size="small" 
-                            onClick={() => navigate(`/peers/${peer.id}`)}
-                          >
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              size="small" 
+                              onClick={() => navigate(`/peers/${peer.id}`)}
+                            >
+                              <VisibilityIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                         <Tooltip title={t('peers.actions.edit')}>
-                          <IconButton 
-                            size="small"
-                            onClick={() => navigate(`/peers/${peer.id}?tab=edit`)}
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              size="small"
+                              onClick={() => navigate(`/peers/${peer.id}?tab=edit`)}
+                            >
+                              <EditIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                         <Tooltip title={t('peers.actions.viewConfig')}>
-                          <IconButton 
-                            size="small"
-                            onClick={() => navigate(`/peers/${peer.id}?tab=config`)}
-                          >
-                            <QrCodeIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              size="small"
+                              onClick={() => navigate(`/peers/${peer.id}?tab=config`)}
+                            >
+                              <QrCodeIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                         <Tooltip title={t('peers.actions.delete')}>
-                          <IconButton 
-                            size="small"
-                            onClick={() => handleOpenDeleteModal(peer)}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              size="small"
+                              onClick={() => handleOpenDeleteModal(peer)}
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                       </Box>
                     </TableCell>

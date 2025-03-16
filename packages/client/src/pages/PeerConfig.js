@@ -305,19 +305,25 @@ function PeerConfig() {
                 </Typography>
                 <Box>
                   <Tooltip title={t('peerConfigPage.actions.copyConfig', '复制配置')}>
-                    <IconButton onClick={handleCopyClick} color={copied ? "success" : "default"}>
-                      {copied ? <CheckCircleIcon /> : <ContentCopyIcon />}
-                    </IconButton>
+                    <span>
+                      <IconButton onClick={handleCopyClick} color={copied ? "success" : "default"}>
+                        {copied ? <CheckCircleIcon /> : <ContentCopyIcon />}
+                      </IconButton>
+                    </span>
                   </Tooltip>
                   <Tooltip title={t('peerConfigPage.actions.downloadConfig', '下载配置文件')}>
-                    <IconButton onClick={handleDownloadClick}>
-                      <DownloadIcon />
-                    </IconButton>
+                    <span>
+                      <IconButton onClick={handleDownloadClick}>
+                        <DownloadIcon />
+                      </IconButton>
+                    </span>
                   </Tooltip>
                   <Tooltip title={t('peerConfigPage.actions.showQRCode', '显示二维码')}>
-                    <IconButton onClick={handleShowQrCode}>
-                      <QrCodeIcon />
-                    </IconButton>
+                    <span>
+                      <IconButton onClick={handleShowQrCode}>
+                        <QrCodeIcon />
+                      </IconButton>
+                    </span>
                   </Tooltip>
                 </Box>
               </Box>

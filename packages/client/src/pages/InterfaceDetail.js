@@ -482,11 +482,13 @@ function InterfaceDetail() {
                           </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                          <Chip 
-                            label={interfaceData.enabled ? t('interfaces.enabled') : t('interfaces.disabled')} 
-                            color={interfaceData.enabled ? 'success' : 'default'} 
-                            size="small" 
-                          />
+                          <Box component="div">
+                            <Chip 
+                              label={interfaceData.enabled ? t('interfaces.enabled') : t('interfaces.disabled')} 
+                              color={interfaceData.enabled ? 'success' : 'default'} 
+                              size="small" 
+                            />
+                          </Box>
                         </Grid>
                         
                         {interfaceData.comment && (
@@ -641,26 +643,30 @@ function InterfaceDetail() {
                             </Typography>
                             {peer.isImported && (
                               <Tooltip title={t('peers.importedPeerTooltip')}>
-                                <Chip 
-                                  label={t('peers.imported')}
-                                  size="small"
-                                  color="info"
-                                  sx={{ ml: 1 }}
-                                />
+                                <span>
+                                  <Chip 
+                                    label={t('peers.imported')}
+                                    size="small"
+                                    color="info"
+                                    sx={{ ml: 1 }}
+                                  />
+                                </span>
                               </Tooltip>
                             )}
                             {peer.lastHandshake && (
                               <Tooltip title={t('interfaceDetail.peers.lastHandshake', { time: new Date(peer.lastHandshake).toLocaleString() })}>
-                                <Chip 
-                                  label={
-                                    isRecentHandshake(peer.lastHandshake) 
-                                      ? t('interfaceDetail.peers.online') 
-                                      : getTimeDifference(peer.lastHandshake)
-                                  }
-                                  color={isRecentHandshake(peer.lastHandshake) ? "success" : "default"}
-                                  size="small"
-                                  sx={{ ml: 1 }}
-                                />
+                                <span>
+                                  <Chip 
+                                    label={
+                                      isRecentHandshake(peer.lastHandshake) 
+                                        ? t('interfaceDetail.peers.online') 
+                                        : getTimeDifference(peer.lastHandshake)
+                                    }
+                                    color={isRecentHandshake(peer.lastHandshake) ? "success" : "default"}
+                                    size="small"
+                                    sx={{ ml: 1 }}
+                                  />
+                                </span>
                               </Tooltip>
                             )}
                           </Box>
@@ -668,17 +674,19 @@ function InterfaceDetail() {
                         secondary={
                           <>
                             <Tooltip title={peer.allowedIPs}>
-                              <Typography component="span" variant="body2" color="text.primary" 
-                                sx={{ 
-                                  maxWidth: 150, 
-                                  display: 'inline-block',
-                                  overflow: 'hidden', 
-                                  textOverflow: 'ellipsis', 
-                                  whiteSpace: 'nowrap',
-                                  verticalAlign: 'middle'
-                                }}>
-                                {peer.allowedIPs}
-                              </Typography>
+                              <span>
+                                <Typography component="span" variant="body2" color="text.primary" 
+                                  sx={{ 
+                                    maxWidth: 150, 
+                                    display: 'inline-block',
+                                    overflow: 'hidden', 
+                                    textOverflow: 'ellipsis', 
+                                    whiteSpace: 'nowrap',
+                                    verticalAlign: 'middle'
+                                  }}>
+                                  {peer.allowedIPs}
+                                </Typography>
+                              </span>
                             </Tooltip>
                             {' — '}{peer.comment || t('interfaceDetail.peers.noComment')}
                           </>
@@ -686,58 +694,66 @@ function InterfaceDetail() {
                       />
                       <ListItemSecondaryAction sx={{ display: 'flex', gap: 0.5 }}>
                         <Tooltip title={t('interfaces.actions.viewDetails')}>
-                          <IconButton 
-                            edge="end" 
-                            aria-label={t('interfaces.actions.viewDetails')} 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/peers/${peer.id}?from_interface=${id}`);
-                            }}
-                            size="small"
-                          >
-                            <VisibilityIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              edge="end" 
+                              aria-label={t('interfaces.actions.viewDetails')} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/peers/${peer.id}?from_interface=${id}`);
+                              }}
+                              size="small"
+                            >
+                              <VisibilityIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                         <Tooltip title={t('interfaces.actions.edit')}>
-                          <IconButton 
-                            edge="end" 
-                            aria-label={t('interfaces.actions.edit')} 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/peers/${peer.id}?tab=edit&from_interface=${id}`);
-                            }}
-                            size="small"
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              edge="end" 
+                              aria-label={t('interfaces.actions.edit')} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/peers/${peer.id}?tab=edit&from_interface=${id}`);
+                              }}
+                              size="small"
+                            >
+                              <EditIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                         <Tooltip title={t('interfaceDetail.peers.viewConfig')}>
-                          <IconButton 
-                            edge="end" 
-                            aria-label={t('interfaceDetail.peers.viewConfig')} 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/peers/${peer.id}?tab=config&from_interface=${id}`);
-                            }}
-                            size="small"
-                            disabled={peer.isImported}
-                          >
-                            <QrCodeIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              edge="end" 
+                              aria-label={t('interfaceDetail.peers.viewConfig')} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/peers/${peer.id}?tab=config&from_interface=${id}`);
+                              }}
+                              size="small"
+                              disabled={peer.isImported}
+                            >
+                              <QrCodeIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                         <Tooltip title={t('interfaces.actions.delete')}>
-                          <IconButton 
-                            edge="end" 
-                            aria-label={t('interfaces.actions.delete')} 
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              navigate(`/peers/${peer.id}?delete=true&from_interface=${id}`);
-                            }}
-                            size="small"
-                            color="error"
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
+                          <span>
+                            <IconButton 
+                              edge="end" 
+                              aria-label={t('interfaces.actions.delete')} 
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/peers/${peer.id}?delete=true&from_interface=${id}`);
+                              }}
+                              size="small"
+                              color="error"
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                          </span>
                         </Tooltip>
                       </ListItemSecondaryAction>
                     </ListItem>

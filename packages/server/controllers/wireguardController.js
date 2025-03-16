@@ -7,6 +7,7 @@ const WireguardConfig = require('../models/WireguardConfig');
 const WireguardPeer = require('../models/WireguardPeer');
 const wireguardTools = require('../utils/wireguardTools');
 const routerOSTools = require('../utils/routerOSTools');
+const { getRouterOSConnection, executeCommand } = require('../utils/routerOSConnection');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -1116,7 +1117,7 @@ exports.syncPeers = async (req, res) => {
       try {
         // 打印将要插入的数据，帮助诊断
         const peerData = {
-          name: peer.comment ? peer.comment : `Peer ${peer['public-key'].slice(0, 8)}...`,
+          name: peer.comment,
           wireguardConfigId: peer.wireguardConfigId,
           publicKey: peer['public-key'],
           privateKey: privateKey, // 使用null作为私钥值
@@ -1408,5 +1409,122 @@ exports.getPeerConfig = async (req, res) => {
   } catch (error) {
     console.error('Error generating peer configuration:', error);
     res.status(500).json({ message: 'Failed to generate configuration', error: error.message });
+  }
+};
+
+/**
+ * 导入所有现有的WireGuard配置
+ */
+exports.importAllConfigurations = async () => {
+  try {
+    const conn = await getRouterOSConnection();
+    
+    // 获取所有WireGuard接口
+    const interfaces = await executeCommand(conn, '/interface/wireguard/print');
+    const savedInterfaces = [];
+    
+    // 遍历并保存所有接口
+    for (const iface of interfaces) {
+      // 检查接口是否已存在于数据库中
+      const existingInterface = await WireguardConfig.findOne({
+        where: { interfaceName: iface.name }
+      });
+      
+      if (!existingInterface) {
+        // 构建接口数据
+        const interfaceData = {
+          interfaceName: iface.name,
+          listenPort: iface['listen-port'] || null,
+          privateKey: iface['private-key'] || null,
+          publicKey: iface['public-key'] || null,
+          address: iface.address || null,
+          mtu: iface.mtu || 1420,
+          enabled: iface.disabled !== 'true',
+          // 如果路由器上的注释字段存在，则使用该字段作为名称；否则使用接口名称
+          name: iface.comment || iface.name
+        };
+        
+        // 创建新的接口记录
+        const newInterface = await WireguardConfig.create(interfaceData);
+        savedInterfaces.push(newInterface);
+      } else {
+        // 更新现有接口
+        await existingInterface.update({
+          listenPort: iface['listen-port'] || existingInterface.listenPort,
+          privateKey: iface['private-key'] || existingInterface.privateKey,
+          publicKey: iface['public-key'] || existingInterface.publicKey,
+          address: iface.address || existingInterface.address,
+          mtu: iface.mtu || existingInterface.mtu,
+          enabled: iface.disabled !== 'true',
+          name: iface.comment || existingInterface.name
+        });
+        savedInterfaces.push(existingInterface);
+      }
+    }
+    
+    // 获取所有对等点
+    const peers = await executeCommand(conn, '/interface/wireguard/peers/print');
+    const savedPeers = [];
+    
+    // 遍历并保存所有对等点
+    for (const peer of peers) {
+      // 查找此对等点关联的接口
+      const interfaceName = peer.interface;
+      const parentInterface = await WireguardConfig.findOne({
+        where: { interfaceName }
+      });
+      
+      if (parentInterface) {
+        // 检查对等点是否已存在
+        const existingPeer = await WireguardPeer.findOne({
+          where: { 
+            wireguardConfigId: parentInterface.id,
+            publicKey: peer['public-key']
+          }
+        });
+        
+        if (!existingPeer) {
+          // 构建对等点数据
+          const peerData = {
+            wireguardConfigId: parentInterface.id,
+            name: peer.comment || `Peer-${peer['public-key'].substring(0, 8)}`,
+            publicKey: peer['public-key'] || null,
+            allowedIPs: peer['allowed-address'] || null,
+            endpoint: peer.endpoint || null,
+            persistentKeepalive: peer['persistent-keepalive'] || null,
+            presharedKey: peer['preshared-key'] || null,
+            enabled: peer.disabled !== 'true',
+            lastHandshake: null
+          };
+          
+          // 创建新的对等点记录
+          const newPeer = await WireguardPeer.create(peerData);
+          savedPeers.push(newPeer);
+        } else {
+          // 更新现有对等点
+          await existingPeer.update({
+            name: peer.comment || existingPeer.name,
+            publicKey: peer['public-key'] || existingPeer.publicKey,
+            allowedIPs: peer['allowed-address'] || existingPeer.allowedIPs,
+            endpoint: peer.endpoint || existingPeer.endpoint,
+            persistentKeepalive: peer['persistent-keepalive'] || existingPeer.persistentKeepalive,
+            presharedKey: peer['preshared-key'] || existingPeer.presharedKey,
+            enabled: peer.disabled !== 'true'
+          });
+          savedPeers.push(existingPeer);
+        }
+      }
+    }
+    
+    // 关闭连接
+    conn.close();
+    
+    return {
+      interfaces: savedInterfaces,
+      peers: savedPeers
+    };
+  } catch (error) {
+    console.error('导入WireGuard配置失败:', error);
+    throw error;
   }
 }; 
