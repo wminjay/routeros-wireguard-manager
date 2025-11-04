@@ -4,7 +4,14 @@
  */
 const MikroNode = require('mikrotik-node').MikroNode;
 const Setting = require('../models/Setting');
-require('dotenv').config();
+const path = require('path');
+
+// 确保从项目根目录加载.env文件
+require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
+
+// 连接配置
+const CONNECTION_TIMEOUT = 10000; // 10秒连接超时
+const COMMAND_TIMEOUT = 15000; // 15秒命令超时
 
 /**
  * 获取RouterOS连接
@@ -51,14 +58,23 @@ const getRouterOSConnection = async () => {
     // 创建连接
     return new Promise((resolve, reject) => {
       try {
+        // 设置连接超时
+        const connectTimeout = setTimeout(() => {
+          reject(new Error(`连接超时: 无法在${CONNECTION_TIMEOUT}ms内连接到RouterOS设备 ${host}:${port}`));
+        }, CONNECTION_TIMEOUT);
+
         const device = new MikroNode(host, parseInt(port));
         device.connect()
-          .then(([login]) => login(user, password))
+          .then(([login]) => {
+            clearTimeout(connectTimeout);
+            return login(user, password);
+          })
           .then((conn) => {
             console.log('RouterOS连接成功');
             resolve(conn);
           })
           .catch((error) => {
+            clearTimeout(connectTimeout);
             console.error('RouterOS连接失败:', error);
             reject(error);
           });
@@ -82,13 +98,28 @@ const getRouterOSConnection = async () => {
  */
 const executeCommand = async (conn, command, params = {}) => {
   return new Promise((resolve, reject) => {
+    // 设置命令超时
+    const commandTimeout = setTimeout(() => {
+      try {
+        conn.close();
+      } catch (e) {
+        console.warn('关闭连接时出错:', e);
+      }
+      reject(new Error(`命令执行超时: ${command} 在${COMMAND_TIMEOUT}ms内未完成`));
+    }, COMMAND_TIMEOUT);
+
     const chan = conn.openChannel();
     
     chan.write(command, params);
     
     chan.on('done', (data) => {
+      clearTimeout(commandTimeout);
       // 处理完毕，关闭通道
-      chan.close();
+      try {
+        chan.close();
+      } catch (e) {
+        console.warn('关闭通道时出错:', e);
+      }
       
       if (data && data.data) {
         // 将结果转换为更易读的对象格式
@@ -100,8 +131,24 @@ const executeCommand = async (conn, command, params = {}) => {
     });
     
     chan.on('trap', (error) => {
+      clearTimeout(commandTimeout);
       // 处理错误
-      chan.close();
+      try {
+        chan.close();
+      } catch (e) {
+        console.warn('关闭通道时出错:', e);
+      }
+      reject(error);
+    });
+
+    chan.on('error', (error) => {
+      clearTimeout(commandTimeout);
+      console.error('Channel错误:', error);
+      try {
+        chan.close();
+      } catch (e) {
+        console.warn('关闭通道时出错:', e);
+      }
       reject(error);
     });
   });
@@ -109,5 +156,7 @@ const executeCommand = async (conn, command, params = {}) => {
 
 module.exports = {
   getRouterOSConnection,
-  executeCommand
+  executeCommand,
+  CONNECTION_TIMEOUT,
+  COMMAND_TIMEOUT
 }; 

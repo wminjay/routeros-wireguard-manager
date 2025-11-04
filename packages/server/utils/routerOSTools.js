@@ -32,7 +32,9 @@ const getInterfaceAddress = async (interfaceName) => {
  */
 const getWireguardInterfaces = async () => {
   try {
+    console.log('正在尝试获取WireGuard接口列表...');
     const interfaces = await executeCommand('/interface/wireguard/print');
+    console.log(`成功获取到${interfaces.length}个WireGuard接口`);
     
     // 为每个接口获取IP地址信息
     for (const iface of interfaces) {
@@ -46,8 +48,25 @@ const getWireguardInterfaces = async () => {
     
     return interfaces;
   } catch (error) {
-    console.error('获取WireGuard接口失败:', error);
-    throw new Error('获取WireGuard接口失败');
+    console.error('获取WireGuard接口失败，详细错误信息:', error);
+    
+    // 提供更具体的错误信息
+    let errorMessage = '获取WireGuard接口失败';
+    if (error.message) {
+      if (error.message.includes('timeout') || error.message.includes('Timeout')) {
+        errorMessage += ' - 连接超时，请检查RouterOS设备连接';
+      } else if (error.message.includes('login') || error.message.includes('auth')) {
+        errorMessage += ' - 认证失败，请检查用户名和密码';
+      } else if (error.message.includes('no such path') || error.message.includes('unknown command')) {
+        errorMessage += ' - WireGuard模块不可用，请检查RouterOS版本和WireGuard包安装';
+      } else if (error.message.includes('permission') || error.message.includes('access')) {
+        errorMessage += ' - 权限不足，请确认用户具有interface权限';
+      } else {
+        errorMessage += ` - ${error.message}`;
+      }
+    }
+    
+    throw new Error(errorMessage);
   }
 };
 
