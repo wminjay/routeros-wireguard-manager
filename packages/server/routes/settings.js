@@ -41,7 +41,20 @@ router.get('/connection-status', settingsController.getConnectionStatus);
  * 更新应用设置
  * @route PUT /api/settings/app
  */
+// 更新应用设置
 router.put('/app', settingsController.updateAppSettings);
+
+// 获取默认的RouterOS连接配置（从环境变量）
+router.get('/default-config', (req, res) => {
+  const routerosConfig = require('../config/routeros');
+  res.json({
+    routerAddress: routerosConfig.ROUTEROS_HOST || '',
+    routerPort: routerosConfig.ROUTEROS_PORT || '8728',
+    routerUser: routerosConfig.ROUTEROS_USER || 'admin',
+    // 不返回密码的明文，只表示是否已配置
+    hasPassword: !!process.env.ROUTEROS_PASSWORD
+  });
+});
 
 // 检查设置状态
 router.get('/setup-status', async (req, res) => {
@@ -50,19 +63,19 @@ router.get('/setup-status', async (req, res) => {
     const setupCompletedSetting = await Setting.findOne({
       where: { key: 'setupCompleted', category: 'app' }
     });
-    
+
     // 检查setupCompleted字段
     const setupCompleted = setupCompletedSetting && setupCompletedSetting.value === 'true';
-    
+
     // 返回设置状态
-    return res.json({ 
-      setupCompleted: !!setupCompleted 
+    return res.json({
+      setupCompleted: !!setupCompleted
     });
   } catch (error) {
     console.error('获取设置状态失败:', error);
-    return res.status(500).json({ 
+    return res.status(500).json({
       message: '获取设置状态失败',
-      error: error.message 
+      error: error.message
     });
   }
 });

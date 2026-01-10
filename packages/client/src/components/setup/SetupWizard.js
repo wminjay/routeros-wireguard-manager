@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -47,6 +47,32 @@ function SetupWizard({ open, onComplete }) {
     importExistingConfig: true
   });
 
+  // 组件挂载时获取默认配置
+  useEffect(() => {
+    const fetchDefaultConfig = async () => {
+      try {
+        const response = await fetch('/api/settings/default-config');
+        if (response.ok) {
+          const data = await response.json();
+          setFormData(prev => ({
+            ...prev,
+            routerAddress: data.routerAddress || prev.routerAddress,
+            routerPort: String(data.routerPort) || prev.routerPort,
+            routerUser: data.routerUser || prev.routerUser,
+            // 如果环境变量中有密码，提示用户
+            routerPassword: data.hasPassword ? '' : prev.routerPassword
+          }));
+        }
+      } catch (error) {
+        console.error('Failed to fetch default config:', error);
+      }
+    };
+
+    if (open) {
+      fetchDefaultConfig();
+    }
+  }, [open]);
+
   const steps = [
     t('setupWizard.steps.welcome'),
     t('setupWizard.steps.routerConnection'),
@@ -71,7 +97,7 @@ function SetupWizard({ open, onComplete }) {
     try {
       setTestLoading(true);
       setTestResult(null);
-      
+
       const response = await fetch('/api/settings/test-connection', {
         method: 'POST',
         headers: {
@@ -84,9 +110,9 @@ function SetupWizard({ open, onComplete }) {
           routerPassword: formData.routerPassword
         })
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setTestResult({
           success: true,
@@ -112,18 +138,18 @@ function SetupWizard({ open, onComplete }) {
   const handleImportConfigs = async () => {
     try {
       setLoading(true);
-      
+
       const response = await fetch('/api/wireguard/import-all', {
         method: 'POST'
       });
-      
+
       if (!response.ok) {
         throw new Error(t('setupWizard.errors.importFailed'));
       }
-      
+
       // 成功导入
       console.log(t('setupWizard.success.importComplete'));
-      
+
     } catch (error) {
       console.error(t('setupWizard.errors.importError'), error);
     } finally {
@@ -134,7 +160,7 @@ function SetupWizard({ open, onComplete }) {
   const handleSaveSettings = async () => {
     try {
       setLoading(true);
-      
+
       // 将扁平结构转换为API需要的嵌套结构
       const apiData = {
         routerOS: {
@@ -150,7 +176,7 @@ function SetupWizard({ open, onComplete }) {
           setupCompleted: true
         }
       };
-      
+
       const response = await fetch('/api/settings', {
         method: 'PUT',
         headers: {
@@ -158,15 +184,15 @@ function SetupWizard({ open, onComplete }) {
         },
         body: JSON.stringify(apiData)
       });
-      
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || t('settings.errors.saveFailed'));
       }
-      
+
       // 保存成功
       console.log(t('settings.saveSuccess'));
-      
+
     } catch (error) {
       console.error(t('settings.errors.saveError'), error);
     } finally {
@@ -180,12 +206,12 @@ function SetupWizard({ open, onComplete }) {
       const response = await fetch('/api/wireguard/peers/status', {
         method: 'POST'
       });
-      
+
       if (!response.ok) {
         console.error(t('peers.errors.statusUpdateFailed'));
         return;
       }
-      
+
       const result = await response.json();
       console.log(t('peers.statusUpdateSuccess', { updated: result.updated }));
     } catch (err) {
@@ -226,7 +252,7 @@ function SetupWizard({ open, onComplete }) {
         setLoading(false);
       }
     }
-    
+
     setActiveStep((prevStep) => prevStep + 1);
   };
 
@@ -253,7 +279,7 @@ function SetupWizard({ open, onComplete }) {
             </Typography>
           </Box>
         );
-        
+
       case 1:
         return (
           <Box sx={{ py: 3 }}>
@@ -263,7 +289,7 @@ function SetupWizard({ open, onComplete }) {
             <Typography variant="body2" sx={{ mb: 3 }}>
               {t('setupWizard.routerConnection.description')}
             </Typography>
-            
+
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -345,10 +371,10 @@ function SetupWizard({ open, onComplete }) {
                   </Button>
                 </Box>
               </Grid>
-              
+
               {testResult && (
                 <Grid item xs={12}>
-                  <Alert 
+                  <Alert
                     severity={testResult.success ? 'success' : 'error'}
                     sx={{ mt: 2 }}
                   >
@@ -359,7 +385,7 @@ function SetupWizard({ open, onComplete }) {
             </Grid>
           </Box>
         );
-        
+
       case 2:
         return (
           <Box sx={{ py: 3 }}>
@@ -369,7 +395,7 @@ function SetupWizard({ open, onComplete }) {
             <Typography variant="body2" sx={{ mb: 3 }}>
               {t('setupWizard.serverConfig.description')}
             </Typography>
-            
+
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <TextField
@@ -411,7 +437,7 @@ function SetupWizard({ open, onComplete }) {
             </Grid>
           </Box>
         );
-        
+
       case 3:
         return (
           <Box sx={{ py: 3 }}>
@@ -421,7 +447,7 @@ function SetupWizard({ open, onComplete }) {
             <Typography variant="body2" sx={{ mb: 3 }}>
               {t('setupWizard.importConfig.description')}
             </Typography>
-            
+
             <Paper variant="outlined" sx={{ p: 3, mb: 3 }}>
               <FormControl component="fieldset">
                 <FormControlLabel
@@ -441,7 +467,7 @@ function SetupWizard({ open, onComplete }) {
             </Paper>
           </Box>
         );
-        
+
       case 4:
         return (
           <Box sx={{ py: 4, textAlign: 'center' }}>
@@ -454,7 +480,7 @@ function SetupWizard({ open, onComplete }) {
             </Typography>
           </Box>
         );
-        
+
       default:
         return null;
     }
@@ -470,7 +496,7 @@ function SetupWizard({ open, onComplete }) {
       <DialogTitle>
         {t('setupWizard.title')}
       </DialogTitle>
-      
+
       <DialogContent dividers>
         <Box sx={{ mb: 4 }}>
           <Stepper activeStep={activeStep} alternativeLabel>
@@ -481,14 +507,14 @@ function SetupWizard({ open, onComplete }) {
             ))}
           </Stepper>
         </Box>
-        
+
         <Card>
           <CardContent>
             {renderStepContent(activeStep)}
           </CardContent>
         </Card>
       </DialogContent>
-      
+
       <DialogActions>
         <Button
           disabled={activeStep === 0 || loading || testLoading}
@@ -502,9 +528,9 @@ function SetupWizard({ open, onComplete }) {
           onClick={handleNext}
           disabled={loading || testLoading || (activeStep === 1 && (!formData.routerAddress || !formData.routerUser || !formData.routerPassword))}
         >
-          {activeStep === steps.length - 1 
+          {activeStep === steps.length - 1
             ? t('setupWizard.finish')
-            : loading || testLoading 
+            : loading || testLoading
               ? <CircularProgress size={24} />
               : t('common.next')
           }

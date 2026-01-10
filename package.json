@@ -35,7 +35,6 @@
     "concurrently": "^8.2.0"
   },
   "dependencies": {
-    "esm": "^3.2.25",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",
     "react-i18next": "^15.4.1"

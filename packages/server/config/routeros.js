@@ -1,8 +1,8 @@
 /**
  * RouterOS API连接配置
- * 使用mikrotik-node库与RouterOS进行通信
+ * 使用node-routeros库与RouterOS进行通信
  */
-const MikroNode = require('mikrotik-node').MikroNode;
+const RouterOSAPI = require('node-routeros').RouterOSAPI;
 const path = require('path');
 
 // 确保从项目根目录加载.env文件
@@ -20,37 +20,54 @@ const COMMAND_TIMEOUT = 15000; // 15秒命令超时
 
 /**
  * 创建RouterOS API连接
- * @returns {Promise} 返回连接对象promise
+ * @returns {Promise<RouterOSAPI>} 返回连接对象promise
  */
-const connectToRouterOS = () => {
-  return new Promise((resolve, reject) => {
-    try {
-      // 设置连接超时
-      const connectTimeout = setTimeout(() => {
-        reject(new Error(`连接超时: 无法在${CONNECTION_TIMEOUT}ms内连接到RouterOS设备 ${ROUTEROS_HOST}:${ROUTEROS_PORT}`));
-      }, CONNECTION_TIMEOUT);
-
-      const device = new MikroNode(ROUTEROS_HOST, ROUTEROS_PORT);
-      
-      device.connect()
-        .then(([login]) => {
-          clearTimeout(connectTimeout);
-          return login(ROUTEROS_USER, ROUTEROS_PASSWORD);
-        })
-        .then((conn) => {
-          console.log('RouterOS连接成功');
-          resolve(conn);
-        })
-        .catch((error) => {
-          clearTimeout(connectTimeout);
-          console.error('RouterOS连接失败:', error);
-          reject(error);
-        });
-    } catch (error) {
-      console.error('创建RouterOS连接失败:', error);
-      reject(error);
-    }
+const connectToRouterOS = async () => {
+  const api = new RouterOSAPI({
+    host: ROUTEROS_HOST,
+    port: parseInt(ROUTEROS_PORT),
+    user: ROUTEROS_USER,
+    password: ROUTEROS_PASSWORD,
+    timeout: CONNECTION_TIMEOUT
   });
+
+  try {
+    await api.connect();
+    console.log('RouterOS连接成功');
+    return api;
+  } catch (error) {
+    console.error('RouterOS连接失败:', error);
+    throw error;
+  }
+};
+
+/**
+ * 将命令路径转换为node-routeros格式
+ * 例如: '/interface/wireguard/print' -> '/interface/wireguard/print'
+ * @param {string} command 原始命令
+ * @returns {string} 转换后的命令
+ */
+const formatCommand = (command) => {
+  // node-routeros使用相同的命令格式
+  return command;
+};
+
+/**
+ * 将参数转换为node-routeros格式
+ * @param {Object} params 原始参数
+ * @returns {Object} 转换后的参数
+ */
+const formatParams = (params) => {
+  const formatted = {};
+  for (const [key, value] of Object.entries(params)) {
+    // node-routeros期望参数以=开头
+    if (key.startsWith('.') || key.startsWith('?')) {
+      formatted[key] = value;
+    } else {
+      formatted[key] = value;
+    }
+  }
+  return formatted;
 };
 
 /**
@@ -60,75 +77,48 @@ const connectToRouterOS = () => {
  * @returns {Promise} 返回命令结果promise
  */
 const executeCommand = async (command, params = {}) => {
-  let conn = null;
+  let api = null;
   try {
-    conn = await connectToRouterOS();
-    
-    return new Promise((resolve, reject) => {
-      // 设置命令超时
-      const commandTimeout = setTimeout(() => {
-        if (conn) {
-          try {
-            conn.close();
-          } catch (e) {
-            console.warn('关闭连接时出错:', e);
-          }
-        }
-        reject(new Error(`命令执行超时: ${command} 在${COMMAND_TIMEOUT}ms内未完成`));
-      }, COMMAND_TIMEOUT);
+    api = await connectToRouterOS();
 
-      const chan = conn.openChannel();
-      
-      chan.write(command, params);
-      
-      chan.on('done', (data) => {
-        clearTimeout(commandTimeout);
-        // 处理完毕，关闭通道和连接
-        try {
-          chan.close();
-          conn.close();
-        } catch (e) {
-          console.warn('关闭连接时出错:', e);
-        }
-        
-        if (data && data.data) {
-          // 将结果转换为更易读的对象格式
-          const results = data.data.map(item => MikroNode.resultsToObj(item));
-          resolve(results);
-        } else {
-          resolve([]);
-        }
-      });
-      
-      chan.on('trap', (error) => {
-        clearTimeout(commandTimeout);
-        // 处理错误
-        try {
-          chan.close();
-          conn.close();
-        } catch (e) {
-          console.warn('关闭连接时出错:', e);
-        }
-        reject(error);
-      });
+    // 构建命令参数数组
+    const cmdParams = [];
+    for (const [key, value] of Object.entries(params)) {
+      if (key.startsWith('?')) {
+        // 查询参数
+        cmdParams.push(`${key}=${value}`);
+      } else if (key.startsWith('.')) {
+        // 特殊参数 (.id, .proplist等)
+        cmdParams.push(`=${key}=${value}`);
+      } else {
+        // 普通参数
+        cmdParams.push(`=${key}=${value}`);
+      }
+    }
 
-      chan.on('error', (error) => {
-        clearTimeout(commandTimeout);
-        console.error('Channel错误:', error);
-        try {
-          chan.close();
-          conn.close();
-        } catch (e) {
-          console.warn('关闭连接时出错:', e);
-        }
-        reject(error);
-      });
+    // 执行命令
+    const response = await api.write(command, cmdParams);
+
+    // 关闭连接
+    await api.close();
+
+    // 转换响应格式以保持兼容性
+    const results = response.map(item => {
+      const obj = {};
+      for (const [key, value] of Object.entries(item)) {
+        // 移除前缀的"="(如果有)
+        const cleanKey = key.startsWith('=') ? key.substring(1) : key;
+        obj[cleanKey] = value;
+      }
+      return obj;
     });
+
+    return results;
   } catch (error) {
     console.error('执行RouterOS命令失败:', error);
-    if (conn) {
+    if (api) {
       try {
-        conn.close();
+        await api.close();
       } catch (e) {
         console.warn('关闭连接时出错:', e);
       }
@@ -143,6 +133,7 @@ module.exports = {
   ROUTEROS_HOST,
   ROUTEROS_PORT,
   ROUTEROS_USER,
+  ROUTEROS_PASSWORD,
   CONNECTION_TIMEOUT,
   COMMAND_TIMEOUT
-}; 
+};

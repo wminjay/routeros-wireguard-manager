@@ -4,7 +4,6 @@
  */
 const { connectToRouterOS, executeCommand, ROUTEROS_HOST, ROUTEROS_PORT, ROUTEROS_USER } = require('../config/routeros');
 const { validationResult } = require('express-validator');
-const MikroNode = require('mikrotik-node').MikroNode;
 
 /**
  * 获取RouterOS连接状态
@@ -30,7 +29,7 @@ exports.getStatusData = async () => {
   try {
     // 尝试使用executeCommand获取身份信息
     const identity = await executeCommand('/system/identity/print');
-    
+
     // 如果连接成功，返回连接信息
     return {
       success: true,
@@ -62,14 +61,14 @@ exports.connect = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  
+
   try {
     // 这里可以实现保存新的连接信息到环境变量或配置文件
     // 但在本示例中我们只是尝试连接
-    
+
     // 尝试连接RouterOS
     await connectToRouterOS();
-    
+
     res.json({
       status: 'connected',
       message: '成功连接到RouterOS'
@@ -109,7 +108,7 @@ exports.getInterfacesData = async () => {
   try {
     // 使用新的executeCommand方法获取接口
     const interfaces = await executeCommand('/interface/print');
-    
+
     return {
       success: true,
       interfaces: interfaces
@@ -132,17 +131,17 @@ exports.getIdentity = async (req, res) => {
   try {
     // 使用新的executeCommand方法获取身份信息
     const identity = await executeCommand('/system/identity/print');
-    
+
     res.json({
       success: true,
       identity: identity.length > 0 ? identity[0] : {}
     });
   } catch (error) {
     console.error('获取RouterOS身份信息失败:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: '获取RouterOS身份信息失败', 
-      error: error.message 
+      message: '获取RouterOS身份信息失败',
+      error: error.message
     });
   }
 };
@@ -157,10 +156,10 @@ exports.getResources = async (req, res) => {
     res.json(resourcesData);
   } catch (error) {
     console.error('获取RouterOS资源使用情况失败:', error);
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
-      message: '获取RouterOS资源使用情况失败', 
-      error: error.message 
+      message: '获取RouterOS资源使用情况失败',
+      error: error.message
     });
   }
 };
@@ -172,17 +171,17 @@ exports.getResourcesData = async () => {
   try {
     // 使用新的executeCommand方法获取资源使用情况
     const resources = await executeCommand('/system/resource/print');
-    
+
     return {
       success: true,
       resources: resources.length > 0 ? resources[0] : {}
     };
   } catch (error) {
     console.error('获取RouterOS资源使用情况失败:', error);
-    return { 
+    return {
       success: false,
-      message: '获取RouterOS资源使用情况失败', 
-      error: error.message 
+      message: '获取RouterOS资源使用情况失败',
+      error: error.message
     };
   }
 }; 
