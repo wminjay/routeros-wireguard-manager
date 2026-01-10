@@ -8,26 +8,82 @@ const path = require('path');
 // 确保从项目根目录加载.env文件
 require('dotenv').config({ path: path.resolve(__dirname, '../../../.env') });
 
-// 从环境变量获取RouterOS连接信息
-const ROUTEROS_HOST = process.env.ROUTEROS_HOST || '192.168.88.1';
-const ROUTEROS_PORT = process.env.ROUTEROS_PORT || 8728;
-const ROUTEROS_USER = process.env.ROUTEROS_USER || 'admin';
-const ROUTEROS_PASSWORD = process.env.ROUTEROS_PASSWORD || '';
+// 从环境变量获取默认RouterOS连接信息
+const DEFAULT_ROUTEROS_HOST = process.env.ROUTEROS_HOST || '192.168.88.1';
+const DEFAULT_ROUTEROS_PORT = process.env.ROUTEROS_PORT || 8728;
+const DEFAULT_ROUTEROS_USER = process.env.ROUTEROS_USER || 'admin';
+const DEFAULT_ROUTEROS_PASSWORD = process.env.ROUTEROS_PASSWORD || '';
+
+// 导出的变量（向后兼容）
+let ROUTEROS_HOST = DEFAULT_ROUTEROS_HOST;
+let ROUTEROS_PORT = DEFAULT_ROUTEROS_PORT;
+let ROUTEROS_USER = DEFAULT_ROUTEROS_USER;
+let ROUTEROS_PASSWORD = DEFAULT_ROUTEROS_PASSWORD;
 
 // 连接配置
 const CONNECTION_TIMEOUT = 10000; // 10秒连接超时
 const COMMAND_TIMEOUT = 15000; // 15秒命令超时
 
 /**
+ * 从数据库获取RouterOS连接凭据
+ * @returns {Promise<Object>} 返回凭据对象
+ */
+const getCredentialsFromDB = async () => {
+  try {
+    // 动态引入以避免循环依赖
+    const Setting = require('../models/Setting');
+
+    // 检查是否已完成初始化
+    const setupCompleted = await Setting.findOne({ where: { key: 'setupCompleted' } });
+
+    if (setupCompleted && setupCompleted.value === 'true') {
+      // 从数据库读取凭据
+      const [hostSetting, portSetting, userSetting, passwordSetting] = await Promise.all([
+        Setting.findOne({ where: { key: 'routerAddress' } }),
+        Setting.findOne({ where: { key: 'routerPort' } }),
+        Setting.findOne({ where: { key: 'routerUser' } }),
+        Setting.findOne({ where: { key: 'routerPassword' } })
+      ]);
+
+      return {
+        host: hostSetting?.value || DEFAULT_ROUTEROS_HOST,
+        port: parseInt(portSetting?.value || DEFAULT_ROUTEROS_PORT),
+        user: userSetting?.value || DEFAULT_ROUTEROS_USER,
+        password: passwordSetting?.value || DEFAULT_ROUTEROS_PASSWORD
+      };
+    }
+  } catch (error) {
+    console.warn('从数据库读取凭据失败，使用环境变量:', error.message);
+  }
+
+  // 回退到环境变量
+  return {
+    host: DEFAULT_ROUTEROS_HOST,
+    port: parseInt(DEFAULT_ROUTEROS_PORT),
+    user: DEFAULT_ROUTEROS_USER,
+    password: DEFAULT_ROUTEROS_PASSWORD
+  };
+};
+
+/**
  * 创建RouterOS API连接
  * @returns {Promise<RouterOSAPI>} 返回连接对象promise
  */
 const connectToRouterOS = async () => {
+  // 从数据库获取凭据
+  const credentials = await getCredentialsFromDB();
+
+  // 更新导出的变量（向后兼容）
+  ROUTEROS_HOST = credentials.host;
+  ROUTEROS_PORT = credentials.port;
+  ROUTEROS_USER = credentials.user;
+  ROUTEROS_PASSWORD = credentials.password;
+
   const api = new RouterOSAPI({
-    host: ROUTEROS_HOST,
-    port: parseInt(ROUTEROS_PORT),
-    user: ROUTEROS_USER,
-    password: ROUTEROS_PASSWORD,
+    host: credentials.host,
+    port: credentials.port,
+    user: credentials.user,
+    password: credentials.password,
     timeout: CONNECTION_TIMEOUT
   });
 
@@ -127,13 +183,30 @@ const executeCommand = async (command, params = {}) => {
   }
 };
 
+/**
+ * 获取当前RouterOS连接信息（异步）
+ * @returns {Promise<Object>} 返回连接信息
+ */
+const getConnectionInfo = async () => {
+  const credentials = await getCredentialsFromDB();
+  return {
+    host: credentials.host,
+    port: credentials.port,
+    user: credentials.user
+  };
+};
+
 module.exports = {
   connectToRouterOS,
   executeCommand,
-  ROUTEROS_HOST,
-  ROUTEROS_PORT,
-  ROUTEROS_USER,
-  ROUTEROS_PASSWORD,
+  getConnectionInfo,
+  getCredentialsFromDB,
+  // 保留这些导出以向后兼容，但值可能是过时的
+  // 推荐使用 getConnectionInfo() 或 getCredentialsFromDB()
+  get ROUTEROS_HOST() { return ROUTEROS_HOST; },
+  get ROUTEROS_PORT() { return ROUTEROS_PORT; },
+  get ROUTEROS_USER() { return ROUTEROS_USER; },
+  get ROUTEROS_PASSWORD() { return ROUTEROS_PASSWORD; },
   CONNECTION_TIMEOUT,
   COMMAND_TIMEOUT
 };

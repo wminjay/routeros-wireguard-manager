@@ -2,7 +2,7 @@
  * RouterOS控制器
  * 处理与RouterOS的基本交互
  */
-const { connectToRouterOS, executeCommand, ROUTEROS_HOST, ROUTEROS_PORT, ROUTEROS_USER } = require('../config/routeros');
+const { connectToRouterOS, executeCommand, getConnectionInfo } = require('../config/routeros');
 const { validationResult } = require('express-validator');
 
 /**
@@ -27,6 +27,9 @@ exports.getStatus = async (req, res) => {
  */
 exports.getStatusData = async () => {
   try {
+    // 获取当前连接信息（从数据库或环境变量）
+    const connectionInfo = await getConnectionInfo();
+
     // 尝试使用executeCommand获取身份信息
     const identity = await executeCommand('/system/identity/print');
 
@@ -34,11 +37,7 @@ exports.getStatusData = async () => {
     return {
       success: true,
       status: 'connected',
-      connection: {
-        host: ROUTEROS_HOST,
-        port: ROUTEROS_PORT,
-        user: ROUTEROS_USER
-      },
+      connection: connectionInfo,
       device: identity.length > 0 ? identity[0].name : '未知设备'
     };
   } catch (error) {
